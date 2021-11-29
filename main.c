@@ -119,22 +119,149 @@ int main() {
 			//return 0; cant do mem dump if it actually stops. remember to uncomment.
 		}
 		//STBA i = 1111 0000 = F0 = 240 | STBA d = 1111 0001 = F1 = 241| STBX i = 1111 1000 = F8 = 248 | STBX d = 1111 1001 = F9 = 249
-		if (is == 241 || is == 249) {
+		else if (is == 241 || is == 249) {
 			STBr();
 		}
-		if (is == 240 || is == 248) {
+		else if (is == 240 || is == 248) {
 			printf("Error. cannot STBr with immdediate addressing");
 		}
 		//LDBA i = 1101 0000 = D0 = 208 | LDBA d = 1101 0001 = D1 = 209 | LDBX i = 1101 1000 = D8 = 216 | LDBX d = 1101 1001 = D9 = 217
-		if (is == 208 || is == 209 || is == 216 || is == 217) {
+		else if (is == 208 || is == 209 || is == 216 || is == 217) {
 			LDBr();
 		}
 
 		//######part 3######//
 
 		//DECO i = 0011 1000 = 56 = 38 | DECO d = 0011 1001 = 57 = 39 | DECO n = 0011 1010 = 58 = 3A | DECO s = 0011 1011 = 59 = 3B | DECO sf = 0011 1100 = 60 = 3C | DECO x = 0011 1101 = 61 = 3D | DECO sx = 0011 1110 = 62 = 3E | DECO sfx = 0011 1111 = 63 = 3F 
-		if (is < 64 && is > 55) {
+		else if (is < 64 && is > 55) {
 			DECO();
+		}
+		//######Part 4######//
+
+		//BR i = 0001 0010 = 12 = 18
+		//BR x = 0001 0011 = 13 = 19
+		else if (is == 18 || is == 19) {
+			BR();
+		}
+		//LDWr 1100 raaa all
+		else if (is >= 192 && is <= 207) {
+			LDWr();
+		}
+		//STWr 1110 raaa all but i
+		else if (is >= 225 && is <= 239) {
+			STWr();
+		}
+		//SUBSP 0101 1aaa all
+		else if (is >= 88 && is <= 95) {
+			SUBSP();
+		}
+		//ADDSP 0101 0aaa all
+		else if (is >= 80 && is <= 87) {
+			ADDSP();
+		}
+		//######Part 5######//
+		//ADDR 0110 raaa all
+		else if (is >= 96 && is <= 111) {
+			ADDr();
+		}
+		//SUBR 0111 raaa all
+		else if (is >= 112 && is <= 127) {
+			SUBr();
+		}
+		//ASLR 0000 1010
+		//ASLR 0000 1011
+		else if (is == 10 || is == 11) {
+			ASLr();
+		}
+		//ASRr 0000 1100
+		//ASRr 0000 1101
+		else if (is == 12 || is = 13) {
+			ASRr();
+		}
+		//DECI 0011 0aaa all but i
+		else if (is >= 49 || is <= 49) {
+			DECI();
+		}
+		//STRO 0100 1aaa d,n,s,sf,x
+		else if (is >= 73 || is <= 77) {
+			STRO();
+		}
+		//######Part 6######//
+		//BRLE 0001 0100
+		//BRLE 0001 0101
+		else if (is == 20 || is == 21) {
+			BRLE();
+		}
+		//0001 0110
+		//0001 0111
+		else if (is == 22 || is == 23) {
+			BRLT();
+		}
+		//0001 1000
+		//0001 1001	
+		else if (is == 24 || is == 25) {
+			BREQ();
+		}
+		//0001 1010
+		//0001 1011
+		else if (is == 26 || is == 27) {
+			BRNE();
+		}
+		//0001 1100
+		//0001 1101
+		else if (is == 28 || is == 29) {
+			BRGE();
+		}
+		//0001 1110
+		//0001 1111
+		else if (is == 30 || is == 31) {
+			BRGT();
+		}
+		//0010 0000
+		//0010 0001
+		else if (is == 32 || is == 33) {
+			BRV();
+		}
+		//0000 0110
+		//0000 0111notr
+		else if (is == 6 || is == 7) {
+			NOTr();
+		}
+		//0000 1000
+		//0000 1001negr
+		else if (is == 8 || is == 9) {
+			NEGr();
+		}
+		//1010 raaa all cpwr
+		else if (is >= 160 || is <= 175) {
+			CPWb();
+		}
+		//1011 raaa all cpbr
+		else if (is >= 176|| is <= 191) {
+			CPBr();
+		}
+		//######Part 7######//
+		//0010 0100
+		//0010 0101
+		else if (is == 36 || is == 37) {
+			CALL();
+			return 0;
+		}
+		//0000 0001
+		else if (is = 1) {
+			RET();
+			return 0;
+		}
+
+		//######Part 8######//
+
+		//0000 0011
+		else if (is = 3) {
+			MOVSPA();
+		}
+		else{
+			printf("instruction not recognized");
+			return 0;
 		}
 	}
 	memDump();

@@ -144,13 +144,12 @@ void DECO() {
 void BR() {
 	//BR i = 0001 0010 = 12 = 18
 	if (is == 18) {
-		pc = os;
+		pc = os - 1;
 	}
 	//BR x = 0001 0011 = 13 = 19
 }
 void LDWr() {
 	//1100 raaa all
-
 
 }
 void STWr() {
