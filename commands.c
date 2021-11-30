@@ -519,7 +519,217 @@ void NEGr() {
 	}
 }
 void CPWr() {
+	int T;
 	//1010 raaa all
+	//CPWA i
+	if (is == 160) {
+		T = a - os;
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWA d
+	else if (is == 161) {
+		T = a - mem[os];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWA n
+	else if (is == 162) {
+		T = a - mem[mem[os]];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWA s
+	else if (is == 163) {
+		T = a - mem[sp + os];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWA sf
+	else if (is == 164) {
+		T = a - mem[mem[sp + os]];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWA x
+	else if (is == 165){
+		T = a - mem[os + x];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWA sx
+	else if (is == 166){
+		T = a - mem[sp + os + x];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWA sfx
+	else if (is == 167){
+		T = a - mem[mem[sp + os] + x];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+
+	//CPWX i
+	if (is == 168) {
+		T = x - os;
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWX d
+	else if (is == 169) {
+		T = x - mem[os];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWX n
+	else if (is == 170) {
+		T = x - mem[mem[os]];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWX s
+	else if (is == 171) {
+		T = x - mem[sp + os];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWX sf
+	else if (is == 172) {
+		T = x - mem[mem[sp + os]];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWX x
+	else if (is == 173) {
+		T = x - mem[os + x];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWX sx
+	else if (is == 174) {
+		T = x - mem[sp + os + x];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
+	//CPWX sfx
+	else if (is == 175) {
+		T = x - mem[mem[sp + os] + x];
+		if (T < 0) {
+			//n bit = 1
+		}
+		else if (T == 0) {
+			//z bit = 1
+		}
+		//v bit = overflow 
+		//c bit = carry
+		//n bit = n ^ v
+	}
 }
 void CPBr() {
 	//1011 raaa all
