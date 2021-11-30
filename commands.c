@@ -412,27 +412,87 @@ void STRO() {
 //######Part 6######//
 void BRLE() {
 	//0001 0100
+	if (is == 20) { //immediate addressing
+		if ( a > 0) {
+			pc = os;
+		}
+	}
 	//0001 0101
+	else {		//indexed addresing
+		if ( a > 0) {
+			pc = mem[os + x];
+		}
+	}
 }
 void BRLT() {
 	//0001 0110
+	if (is == 22) { //immedate 
+		if ( a >= 0){
+			pc = os;
+		}
+	}
 	//0001 0111
+	else { // is == 23, indexed
+		if( a >= 0){ 
+			pc = mem[os + x];
+		}
+	}
 }
 void BREQ() {
 	//0001 1000
+	if (is == 24) { //immediate
+		if (a != 0) {
+			pc = os;
+		}
+	}
 	//0001 1001
+	else { //is == 25, indexed
+		if (a != 0) {
+			pc = mem[os + x];
+		}
+	}
 }
 void BRNE() {
 	//0001 1010
+	if (is == 26) { //immediate
+		if (a == 0) {
+			pc = os;
+		}
+	}
 	//0001 1011
+	else { //is == 27, indexed
+		if (a == 0) {
+			pc = mem[os + x];
+		}
+	}
 }
 void BRGE() {
 	//0001 1100
+	if (is == 28) {
+		if (a < 0) {
+			pc = os;
+		}
+	}
 	//0001 1101
+	else { // is == 29
+		if (a < 0) {
+			pc = mem[os + x];
+		}
+	}
 }
 void BRGT() {
 	//0001 1110
+	if (is == 30) {
+		if (a <= 0) {
+			pc = os;
+		}
+	}
 	//0001 1111
+	else { //is == 31
+		if (a <= 0) {
+			pc = mem[os + x];
+		}
+	}
 }
 void BRV() {
 	//0010 0000
