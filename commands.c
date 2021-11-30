@@ -26,32 +26,26 @@ void STBr() {
 	//STBA n = 1111 0010 = F2 = 242
 	if (is == 242) {
 		mem[mem[os]] = a % 256;  //256 since could be a word
-		return 0;
 	}
 	//STBA s = 1111 0011 = F3 = 243
 	if (is == 243) {
 		mem[sp + os] = a % 256;
-		return 0;
 	}
 	//STBA sf = 1111 0100 = F4 = 244
 	if (is == 244) {
 		mem[mem[sp + os]] = a % 256;
-		return 0;
 	}
 	//STBA x = 1111 0101 = F5 = 245
 	if (is == 245) {
 		mem[os + x] = a % 256;
-		return 0;
 	}
 	//STBA sx = 1111 0110 = F6 = 246
 	if (is == 246) {
 		mem[sp + os + x] = a % 256;
-		return 0;
 	}
 	//STBA sfx = 1111 0111 = F7 = 247
 	if (is == 247) {
 		mem[mem[sp + os] + x] = a % 256;
-		return 0;
 	}
 	
 	//STBX d = 1111 1001 = F9 = 249
@@ -65,32 +59,26 @@ void STBr() {
 	//STBX n = 1111 1010 = FA = 250
 	if (is == 250) {
 		mem[mem[os]] = x % 256;
-		return 0;
 	}
 	//STBX s = 1111 1011 = FB = 251
 	if (is == 251) {
 		mem[sp + os] = x % 256;
-		return 0;
 	}
 	//STBX sf = 1111 1100 = FC = 252
 	if (is == 252) {
 		mem[mem[sp + os]] = x % 256;
-		return 0;
 	}
 	//STBX X = 1111 1101 = FD = 253
 	if (is == 253) {
 		mem[os + x] = x % 256;
-		return 0;
 	}
 	//STBX sx = 1111 1110 = FE = 254
 	if (is == 254) {
 		mem[sp + os + x] = x % 256;
-		return 0;
 	}
 	//STBX sfx = 1111 1111 = FF = 255
 	if (is == 255) {
 		mem[mem[sp + os] + x] = x % 256;
-		return 0;
 	}
 	
 }
@@ -117,32 +105,26 @@ void LDBr() {
 	//LDBA n = 1101 0010 = D2 = 210
 	if (is == 210) {
 		a = mem[mem[os]] % 256;
-		return 0;
 	}
 	//LDBA s = 1101 0011 = D3 = 211
 	if (is == 211) {
 		a = mem[sp + os] % 256;
-		return 0;
 	}
 	//LDBA sf = 1101 0100 = D4 = 212
 	if (is == 212) {
 		a = mem[mem[sp + os]] % 256;
-		return 0;
 	}
 	//LDBA x = 1101 0101 = D5 = 213
 	if (is == 213) {
 		a = mem[os + x] % 256;
-		return 0;
 	}
 	//LDBA sx = 1101 0110 = D6 = 214
 	if (is == 214) {
 		a = mem[sp + os + x] % 256;
-		return 0;
 	}
 	//LDBA sfx = 1101 0111 = D7 = 215
 	if (is == 215) {
 		a = mem[mem[sp + os] + x];
-		return 0;
 	}
 	
 	//LDBX i = 1101 1000 = D8 = 216
@@ -168,36 +150,30 @@ void LDBr() {
 	//LDBX n = 1101 1010 = DA = 218
 	if (is == 218) {
 		x = mem[mem[os]] % 256;
-		return 0;
 	}
 
 	//LDBX s = 1101 1011 = DB = 219
 	if (is == 219) {
 		x = mem[sp + os] % 256;
-		return 0;
 	}
 
 	//LDBX sf = 1101 1100 = DC = 220
 	if (is == 220) {
 		x = mem[mem[sp + os]] % 256;
-		return 0;
 	}
 
 	//LDBX x = 1101 1101 = DD = 221
 	if (is == 221) {
 		x = mem[os + x] % 256;
-		return 0;
 	}
 
 	//LDBX sx = 1101 1110 = DE = 222
 	if (is == 222) {
 		x = mem[sp + os + x] % 256;
-		return 0;
 	}
 	//LDBX sfx = 1101 1111 = DF = 223 
 	if (is == 223) {
 		x = mem[mem[sp + os] + x] % 256;
-		return 0;
 	}
 	 
 }
@@ -273,122 +249,66 @@ void ADDr() {
 	//ADDA immediate
 	if (is == 96) {
 		a += os;
-		return 0;
 	}
 	//ADDA direct
 	else if (is == 97) {
 		a += mem[os];
-		return 0;
 	}
 	//ADDA indirect
 	else if (is == 98) {
 		a += mem[mem[os]];
-		return 0;
 	}
 	//ADDA s
 	else if (is == 99) {
 		a += mem[sp + os];
-		return 0;
 	}
 	//ADDA sf
 	else if (is == 100) {
 		a += mem[mem[sp + os]];
-		return 0;
 	}
 	//ADDA x 
 	else if (is == 101) {
 		a += mem[os + x];
-		return 0;
 	}
 	//ADDA sx
 	else if (is == 102) {
 		a += mem[sp + os + x];
-		return 0;
 	}
 	//ADDA sfx
 	else if (is == 103) {
 		a += mem[mem[sp + os] + x];
-		return o;
-		//ADDA immediate
-	if(is == 96){ 
-        a += os;
-        return 0;
-    }
-	//ADDA direct
-	else if (is == 97){	
-		a += mem[os];
-		return 0;
-    }
-	//ADDA indirect
-	else if (is == 98){
-		a += mem[mem[os]];
-		return 0;
-	}
-	//ADDA s
-	else if (is == 99){
-		a += mem[sp + os];
-		return 0;
-	}
-	//ADDA sf
-	else if (is == 100){
-		a += mem[mem[sp +os]];
-		return 0;
-	}
-	//ADDA x 
-	else if ( is == 101){
-		a += mem[os + x];
-		return 0;
-	}
-	//ADDA sx
-	else if (is == 102){
-		a += mem[sp + os + x];
-		return 0;
-	}
-	//ADDA sfx
-	else if (is == 103){
-		a += mem[mem[sp+os]+x];
-		return 0;
-	}
 	
 	//ADDX immediate
 	else if (is == 104) {
 		x += os;
-		return 0;
 	}
 	//ADDX direct
 	else if (is == 105) {
 		x += mem[os];
-		return 0;
 	}
 	//ADDX n 
 	else if (is == 106) {
 		x += mem[mem[os]];
-		return 0;
 	}
 	//ADDX s
 	else if (is == 107) {
 		x += mem[sp + os];
-		return 0;
 	}
 	//ADDX sf
 	else if (is == 108) {
 		x += mem[mem[sp + os]];
-		return 0;
 	}
 	//ADDX x
 	else if (is == 109) {
 		x += mem[os + x];
-		return 0;
 	}
 	//ADDX sx
 	else if (is == 110) {
 		x += mem[sp + os + x];
-		return 0;
 	}
 	//ADDX sfx
 	else if (is == 111) {
 		x += mem[mem[sp + os] + x];
-		return 0;
 	}
 }
 
@@ -397,91 +317,91 @@ void SUBr() {
 	//SUBA immediate
 	if (is == 112) {
 		a -= os;
-		return 0;
 	}
 	//SUBA direct
 	else if (is == 113) {
 		a -= mem[os];
-		return 0;
 	}
 	//SUBA n
 	else if (is == 114) {
 		a -= mem[mem[os]];
-		return 0;
 	}
 	//SUBA s
 	else if (is == 115) {
 		a -= mem[sp + os];
-		return 0;
 	}
 	//SUBA sf
 	else if (is == 116) {
 		a -= mem[mem[sp + os]];
-		return 0;
 	}
 	//SUBA x 
 	else if (is == 117) {
 		a -= mem[os + x];
-		return 0;
 	}
 	//SUBA sx
 	else if (is == 118) {
 		a -= mem[sp + os + x];
-		return 0;
 	}
 	//SUBA sfx
 	else if (is == 119) {
 		a -= mem[mem[sp + os] + x];
-		return 0;
 	}
 
 	//SUBX immediate
 	else if (is == 120) {
 		x -= os;
-		return 0;
 	}
 	//SUBX direct
 	else if (is == 121) { 
 		x -= mem[os];
-		return 0;
 	}
 	//SUBX n
 	else if (is == 122) {
 		x -= mem[mem[os]];
-		return 0;
 	}
 	//SUBX s
 	else if (is == 123) {
 		x -= mem[sp + os];
-		return 0;
 	}
 	//SUBX sf
 	else if (is == 124) {
 		x -= mem[mem[sp + os]];
-		return 0;
 	}
 	//SUBX x
 	else if (is == 125) {
 		x -= mem[os + x];
-		return 0;
 	}
 	//SUBX sx
 	else if (is == 126) {
 		x -= mem[sp + os + x];
-		return 0;
 	}
 	//SUBX sfx
 	else if (is == 127){
 		x -= mem[mem[sp + os] + x];
-		return 0;
 }
 void ASLr() {
 	//0000 1010
+	if (is = 10) {
+		//perform an Arithmatic Shift Left on the value in the Accumulator
+		a = a * 2;
+	}
 	//0000 1011
+	else {
+		// perform an ASL on the value in the Index Register
+		x = x * 2;
+	}
 }
 void ASRr() {
 	//0000 1100
+	if (is = 12) {
+		//perform an Arithmetic Shift Right on the value in the Accumulator
+		a = a / 2;
+	}
 	//0000 1101
+	else {
+		//perform an ASR on the value in the Index Register
+		x = x / 2;
+	}
 }
 void DECI() {
 	//0011 0aaa all but i
