@@ -500,11 +500,23 @@ void BRV() {
 }
 void NOTr() {
 	//0000 0110
+	if (is = 6) {
+		a = ~a;  //NOTA, flip the bits
+	}
 	//0000 0111
+	else {
+		x = ~x;  //NOTX
+	}
 }
 void NEGr() {
 	//0000 1000
+	if (is = 8) {
+		a = ~a + 1;  //NEGA, flip the bits in the accumulator and add 1
+	}
 	//0000 1001
+	else {
+		x = ~x + 1;  //NEGX, flip the bits in the index register and add 1
+	}
 }
 void CPWr() {
 	//1010 raaa all
@@ -515,10 +527,22 @@ void CPBr() {
 //######Part 7######//
 void CALL() {
 	//0010 0100
+	if (is == 36) { //immediate
+		sp -= 2;
+		mem[sp] = pc;
+		pc = os;
+	}
 	//0010 0101
+	else { //is == 37, indexed
+		sp - = 2;
+		mem[sp] = pc;
+		pc = mem[os + x];
+	}
 }
 void RET() {
 	//0000 0001
+	pc = mem[sp];
+	sp += 2;
 }
 //######Part 8######//
 void MOVSPA() {
