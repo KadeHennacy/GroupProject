@@ -24,11 +24,36 @@ void STBr() {
 		else mem[os] = a % 256;
 	}
 	//STBA n = 1111 0010 = F2 = 242
+	if (is == 242) {
+		mem[mem[os]] = a % 256;  //256 since could be a word
+		return 0;
+	}
 	//STBA s = 1111 0011 = F3 = 243
+	if (is == 243) {
+		mem[sp + os] = a % 256;
+		return 0;
+	}
 	//STBA sf = 1111 0100 = F4 = 244
-	//STBA X = 1111 0101 = F5 = 245
+	if (is == 244) {
+		mem[mem[sp + os]] = a % 256;
+		return 0;
+	}
+	//STBA x = 1111 0101 = F5 = 245
+	if (is == 245) {
+		mem[os + x] = a % 256;
+		return 0;
+	}
 	//STBA sx = 1111 0110 = F6 = 246
+	if (is == 246) {
+		mem[sp + os + x] = a % 256;
+		return 0;
+	}
 	//STBA sfx = 1111 0111 = F7 = 247
+	if (is == 247) {
+		mem[mem[sp + os] + x] = a % 256;
+		return 0;
+	}
+	
 	//STBX d = 1111 1001 = F9 = 249
 	if (is == 249) {
 		if (os == 64534) {
@@ -36,12 +61,38 @@ void STBr() {
 		}
 		else mem[os] = x % 256;
 	}
+	
 	//STBX n = 1111 1010 = FA = 250
+	if (is == 250) {
+		mem[mem[os]] = x % 256;
+		return 0;
+	}
 	//STBX s = 1111 1011 = FB = 251
+	if (is == 251) {
+		mem[sp + os] = x % 256;
+		return 0;
+	}
 	//STBX sf = 1111 1100 = FC = 252
+	if (is == 252) {
+		mem[mem[sp + os]] = x % 256;
+		return 0;
+	}
 	//STBX X = 1111 1101 = FD = 253
+	if (is == 253) {
+		mem[os + x] = x % 256;
+		return 0;
+	}
 	//STBX sx = 1111 1110 = FE = 254
-	//STBX sfx = 1111 1111 = FF = 256
+	if (is == 254) {
+		mem[sp + os + x] = x % 256;
+		return 0;
+	}
+	//STBX sfx = 1111 1111 = FF = 255
+	if (is == 255) {
+		mem[mem[sp + os] + x] = x % 256;
+		return 0;
+	}
+	
 }
 void LDBr() {
 	//LDBA i = 1101 0000 = D0 = 208
@@ -64,11 +115,36 @@ void LDBr() {
 		else a = mem[os] % 256;
 	}
 	//LDBA n = 1101 0010 = D2 = 210
+	if (is == 210) {
+		a = mem[mem[os]] % 256;
+		return 0;
+	}
 	//LDBA s = 1101 0011 = D3 = 211
+	if (is == 211) {
+		a = mem[sp + os] % 256;
+		return 0;
+	}
 	//LDBA sf = 1101 0100 = D4 = 212
+	if (is == 212) {
+		a = mem[mem[sp + os]] % 256;
+		return 0;
+	}
 	//LDBA x = 1101 0101 = D5 = 213
+	if (is == 213) {
+		a = mem[os + x] % 256;
+		return 0;
+	}
 	//LDBA sx = 1101 0110 = D6 = 214
+	if (is == 214) {
+		a = mem[sp + os + x] % 256;
+		return 0;
+	}
 	//LDBA sfx = 1101 0111 = D7 = 215
+	if (is == 215) {
+		a = mem[mem[sp + os] + x];
+		return 0;
+	}
+	
 	//LDBX i = 1101 1000 = D8 = 216
 	if (is == 216) {
 		x = os % 256;
@@ -88,12 +164,42 @@ void LDBr() {
 		}
 		else x = mem[os] % 256;
 	}
+	
 	//LDBX n = 1101 1010 = DA = 218
+	if (is == 218) {
+		x = mem[mem[os]] % 256;
+		return 0;
+	}
+
 	//LDBX s = 1101 1011 = DB = 219
+	if (is == 219) {
+		x = mem[sp + os] % 256;
+		return 0;
+	}
+
 	//LDBX sf = 1101 1100 = DC = 220
+	if (is == 220) {
+		x = mem[mem[sp + os]] % 256;
+		return 0;
+	}
+
 	//LDBX x = 1101 1101 = DD = 221
+	if (is == 221) {
+		x = mem[os + x] % 256;
+		return 0;
+	}
+
 	//LDBX sx = 1101 1110 = DE = 222
+	if (is == 222) {
+		x = mem[sp + os + x] % 256;
+		return 0;
+	}
 	//LDBX sfx = 1101 1111 = DF = 223 
+	if (is == 223) {
+		x = mem[mem[sp + os] + x] % 256;
+		return 0;
+	}
+	 
 }
 
 //######part3######
