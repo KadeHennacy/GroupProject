@@ -270,7 +270,128 @@ void ADDSP() {
 //######Part 5######//
 void ADDr() {
 	//0110 raaa all
+	//ADDA immediate
+	if (is == 96) {
+		a += os;
+		return 0;
+	}
+	//ADDA direct
+	else if (is == 97) {
+		a += mem[os];
+		return 0;
+	}
+	//ADDA indirect
+	else if (is == 98) {
+		a += mem[mem[os]];
+		return 0;
+	}
+	//ADDA s
+	else if (is == 99) {
+		a += mem[sp + os];
+		return 0;
+	}
+	//ADDA sf
+	else if (is == 100) {
+		a += mem[mem[sp + os]];
+		return 0;
+	}
+	//ADDA x 
+	else if (is == 101) {
+		a += mem[os + x];
+		return 0;
+	}
+	//ADDA sx
+	else if (is == 102) {
+		a += mem[sp + os + x];
+		return 0;
+	}
+	//ADDA sfx
+	else if (is == 103) {
+		a += mem[mem[sp + os] + x];
+		return o;
+		//ADDA immediate
+	if(is == 96){ 
+        a += os;
+        return 0;
+    }
+	//ADDA direct
+	else if (is == 97){	
+		a += mem[os];
+		return 0;
+    }
+	//ADDA indirect
+	else if (is == 98){
+		a += mem[mem[os]];
+		return 0;
+	}
+	//ADDA s
+	else if (is == 99){
+		a += mem[sp + os];
+		return 0;
+	}
+	//ADDA sf
+	else if (is == 100){
+		a += mem[mem[sp +os]];
+		return 0;
+	}
+	//ADDA x 
+	else if ( is == 101){
+		a += mem[os + x];
+		return 0;
+	}
+	//ADDA sx
+	else if (is == 102){
+		a += mem[sp + os + x];
+		return 0;
+	}
+	//ADDA sfx
+	else if (is == 103){
+		a += mem[mem[sp+os]+x];
+		return 0;
+	}
+	
+	//ADDX immediate
+	else if (is == 104) {
+		x += os;
+		return 0;
+	}
+	//ADDX direct
+	else if (is == 105) {
+		x += mem[os];
+		return 0;
+	}
+	//ADDX n 
+	else if (is == 106) {
+		x += mem[mem[os]];
+		return 0;
+	}
+	//ADDX s
+	else if (is == 107) {
+		x += mem[sp + os];
+		return 0;
+	}
+	//ADDX sf
+	else if (is == 108) {
+		x += mem[mem[sp + os]];
+		return 0;
+	}
+	//ADDX x
+	else if (is == 109) {
+		x += mem[os + x];
+		return 0;
+	}
+	//ADDX sx
+	else if (is == 110) {
+		x += mem[sp + os + x];
+		return 0;
+	}
+	//ADDX sfx
+	else if (is == 111) {
+		x += mem[mem[sp + os] + x];
+		return 0;
+	}
 }
+
 void SUBr() {
 	//0111 raaa all
 }
