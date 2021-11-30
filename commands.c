@@ -394,6 +394,86 @@ void ADDr() {
 
 void SUBr() {
 	//0111 raaa all
+	//SUBA immediate
+	if (is == 112) {
+		a -= os;
+		return 0;
+	}
+	//SUBA direct
+	else if (is == 113) {
+		a -= mem[os];
+		return 0;
+	}
+	//SUBA n
+	else if (is == 114) {
+		a -= mem[mem[os]];
+		return 0;
+	}
+	//SUBA s
+	else if (is == 115) {
+		a -= mem[sp + os];
+		return 0;
+	}
+	//SUBA sf
+	else if (is == 116) {
+		a -= mem[mem[sp + os]];
+		return 0;
+	}
+	//SUBA x 
+	else if (is == 117) {
+		a -= mem[os + x];
+		return 0;
+	}
+	//SUBA sx
+	else if (is == 118) {
+		a -= mem[sp + os + x];
+		return 0;
+	}
+	//SUBA sfx
+	else if (is == 119) {
+		a -= mem[mem[sp + os] + x];
+		return 0;
+	}
+
+	//SUBX immediate
+	else if (is == 120) {
+		x -= os;
+		return 0;
+	}
+	//SUBX direct
+	else if (is == 121) { 
+		x -= mem[os];
+		return 0;
+	}
+	//SUBX n
+	else if (is == 122) {
+		x -= mem[mem[os]];
+		return 0;
+	}
+	//SUBX s
+	else if (is == 123) {
+		x -= mem[sp + os];
+		return 0;
+	}
+	//SUBX sf
+	else if (is == 124) {
+		x -= mem[mem[sp + os]];
+		return 0;
+	}
+	//SUBX x
+	else if (is == 125) {
+		x -= mem[os + x];
+		return 0;
+	}
+	//SUBX sx
+	else if (is == 126) {
+		x -= mem[sp + os + x];
+		return 0;
+	}
+	//SUBX sfx
+	else if (is == 127){
+		x -= mem[mem[sp + os] + x];
+		return 0;
 }
 void ASLr() {
 	//0000 1010
