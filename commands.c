@@ -29,7 +29,10 @@ void STBr() {
 	}
 	//STBA s = 1111 0011 = F3 = 243
 	if (is == 243) {
-		mem[sp + os] = a % 256;
+		if (os > 32767) {
+			mem[sp + os - 65536] = a % 256;
+		}
+		else mem[sp + os] = a % 256;
 	}
 	//STBA sf = 1111 0100 = F4 = 244
 	if (is == 244) {
@@ -246,22 +249,29 @@ void ADDSP() {
 //######Part 5######//
 void ADDr() {
 	//0110 raaa all
-	//ADDA immediate
+	//ADDA immediate tesed, works
 	if (is == 96) {
 		a += os;
 	}
 	//ADDA direct
 	else if (is == 97) {
-		a += mem[os];
+		//the +1 fixes the off by 1 that prevents it from outputting the same as PEP9. IDK if this fix will work for all cases yet.
+		a += mem[os + 1];
 	}
 	//ADDA indirect
 	else if (is == 98) {
-		a += mem[mem[os]];
+		//this is the same exact code from DECO N. It appears to work.
+		a += mem[mem[os] * 256 + mem[os + 1]] * 256 + mem[mem[os] * 256 + mem[os + 1] + 1];
 	}
 	//ADDA s
 	else if (is == 99) {
-		a += mem[sp + os];
+		//tested, works
+		if (os > 32767) {
+			a += mem[os - 65536 + sp] * 256 + mem[os - 65536 + sp + 1];
+		}
+		else a += mem[os + sp] * 256 + mem[os + sp + 1];
 	}
+	//////havent tested the rest///////
 	//ADDA sf
 	else if (is == 100) {
 		a += mem[mem[sp + os]];

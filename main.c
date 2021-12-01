@@ -119,7 +119,8 @@ int main() {
 			//return 0; cant do mem dump if it actually stops. remember to uncomment.
 		}
 		//STBA i = 1111 0000 = F0 = 240 | STBA d = 1111 0001 = F1 = 241| STBX i = 1111 1000 = F8 = 248 | STBX d = 1111 1001 = F9 = 249
-		else if (is == 241 || is == 249) {
+		//1111 raaa
+		else if ((is >= 241 && is <= 247) || (is >= 249 && is <= 255)){
 			STBr();
 		}
 		else if (is == 240 || is == 248) {
