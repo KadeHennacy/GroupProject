@@ -227,11 +227,14 @@ void DECO() {
 }
 //######Part 4######//
 void BR() {
-	//BR i = 0001 0010 = 12 = 18
+	//BR i = 0001 0010 = 12 = 18 tested, works
 	if (is == 18) {
 		pc = os - 1;
 	}
-	//BR x = 0001 0011 = 13 = 19
+	//BR x = 0001 0011 = 13 = 19 tested, works
+	if (is == 19) {
+		pc = mem[os + 1] -1 + x;
+	}
 }
 void LDWr() {
 	//1100 raaa all
