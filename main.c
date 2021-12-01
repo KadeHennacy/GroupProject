@@ -6,16 +6,6 @@
 * Group Project
 *
 * Describe program here
-* a
-* a
-* a
-* a
-* a
-* a
-* a
-* a
-* a
-* a
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
