@@ -237,11 +237,193 @@ void BR() {
 	}
 }
 void LDWr() {
+	//from ldbr
+	//LDBA i = 1101 0000 = D0 = 208
+	if (is == 208) {
+		//only rightmost byte
+		a = os % 256;
+	}
+	//LDBA d = 1101 0001 = D1 = 209
+	if (is == 209) {
+		//fc15 is input device
+		if (os == 64533) {
+			printf("Enter Input: ");
+			if (scanf("%d", &a) > 0) {
+				printf("You entered %d\n", a);
+				//ensure user doen't enter more than a byte
+				a = a % 256;
+			}
+			else printf("You didn't enter anything.\n");
+		}
+		else a = mem[os] % 256;
+	}
+	//LDBA n = 1101 0010 = D2 = 210
+	if (is == 210) {
+		a = mem[mem[os]] % 256;
+	}
+	//LDBA s = 1101 0011 = D3 = 211
+	if (is == 211) {
+		a = mem[sp + os] % 256;
+	}
+	//LDBA sf = 1101 0100 = D4 = 212
+	if (is == 212) {
+		a = mem[mem[sp + os]] % 256;
+	}
+	//LDBA x = 1101 0101 = D5 = 213
+	if (is == 213) {
+		a = mem[os + x] % 256;
+	}
+	//LDBA sx = 1101 0110 = D6 = 214
+	if (is == 214) {
+		a = mem[sp + os + x] % 256;
+	}
+	//LDBA sfx = 1101 0111 = D7 = 215
+	if (is == 215) {
+		a = mem[mem[sp + os] + x];
+	}
+
+	//LDBX i = 1101 1000 = D8 = 216
+	if (is == 216) {
+		x = os % 256;
+	}
+
+	//LDBX d = 1101 1001 = D9 = 217
+	if (is == 217) {
+		//fc15 is input device
+		if (os == 64533) {
+			printf("Enter Input: ");
+			if (scanf("%d", &x) > 0) {
+				printf("You entered %d\n", x);
+				//ensure user doesn't enter more than a byte
+				x = x % 256;
+			}
+			else printf("You didn't enter anything.\n");
+		}
+		else x = mem[os] % 256;
+	}
+
+	//LDBX n = 1101 1010 = DA = 218
+	if (is == 218) {
+		x = mem[mem[os]] % 256;
+	}
+
+	//LDBX s = 1101 1011 = DB = 219
+	if (is == 219) {
+		x = mem[sp + os] % 256;
+	}
+
+	//LDBX sf = 1101 1100 = DC = 220
+	if (is == 220) {
+		x = mem[mem[sp + os]] % 256;
+	}
+
+	//LDBX x = 1101 1101 = DD = 221
+	if (is == 221) {
+		x = mem[os + x] % 256;
+	}
+
+	//LDBX sx = 1101 1110 = DE = 222
+	if (is == 222) {
+		x = mem[sp + os + x] % 256;
+	}
+	//LDBX sfx = 1101 1111 = DF = 223 
+	if (is == 223) {
+		x = mem[mem[sp + os] + x] % 256;
+	}
+
+
 	//1100 raaa all
+	//at part 4 we need i, d, s
+	//int word = mem[os] * 256 + mem[os + 1];
+	//LDWA i = 1100 0000 = 192
+	if (is == 192) {
+		a = mem[os] * 256 + mem[os + 1];
+	}
+	//LDWA d = 1100 0001 = 193
+	if (is == 193) {
+		if (os == 64533) {
+			printf("Enter Input: ");
+			if (scanf("%d", &a) > 0) {
+				printf("You entered %d\n", a);
+				//ensure user doen't enter more than a byte
+				a = a % 256;
+			}
+			else printf("You didn't enter anything.\n");
+		}
+		else a = mem[os] % 256;
+	}
 
 }
 void STWr() {
 	//1110 raaa all but i
+	//same as stbr without the mod
+	
+	//STWA d
+	if (is == 225) {
+		//fc16 is output device
+		if (os == 64534) printf("%c", a);
+		else mem[os] = a;
+	}
+	//STWA n
+	if (is == 226) {
+		mem[mem[os]] = a;
+	}
+	//STWA s
+	if (is == 227) {
+		if (os > 32767) {
+			mem[sp + os - 65536] = a;
+		}
+		else mem[sp + os] = a;
+	}
+	//STWA sf
+	if (is == 228) {
+		mem[mem[sp + os]] = a;
+	}
+	//STWA x
+	if (is == 229) {
+		mem[os + x] = a;
+	}
+	//STWA sx
+	if (is == 230) {
+		mem[sp + os + x] = a;
+	}
+	//STWA sfx
+	if (is == 231) {
+		mem[mem[sp + os] + x] = a;
+	}
+
+	//STWX d
+	if (is == 233) {
+		if (os == 64534) {
+			printf("%c", x);
+		}
+		else mem[os] = x;
+	}
+
+	//STWX n
+	if (is == 234) {
+		mem[mem[os]] = x;
+	}
+	//STWX s
+	if (is == 235) {
+		mem[sp + os] = x;
+	}
+	//STWX sf
+	if (is == 236) {
+		mem[mem[sp + os]] = x;
+	}
+	//STWX X
+	if (is == 237) {
+		mem[os + x] = x;
+	}
+	//STWX sx
+	if (is == 238) {
+		mem[sp + os + x] = x;
+	}
+	//STWX sfx
+	if (is == 239) {
+		mem[mem[sp + os] + x] = x;
+	}
 }
 void SUBSP() {
 	//0101 1aaa all
