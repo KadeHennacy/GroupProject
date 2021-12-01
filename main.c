@@ -185,7 +185,7 @@ int main() {
 		}
 		//ASRr 0000 1100
 		//ASRr 0000 1101
-		else if (is == 12 || is = 13) {
+		else if (is == 12 || is == 13) {
 			ASRr();
 		}
 		//DECI 0011 0aaa all but i
@@ -244,7 +244,7 @@ int main() {
 		}
 		//1010 raaa all cpwr
 		else if (is >= 160 || is <= 175) {
-			CPWb();
+			CPWr();
 		}
 		//1011 raaa all cpbr
 		else if (is >= 176|| is <= 191) {

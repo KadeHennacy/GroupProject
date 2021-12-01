@@ -277,7 +277,7 @@ void ADDr() {
 	//ADDA sfx
 	else if (is == 103) {
 		a += mem[mem[sp + os] + x];
-	
+	}
 	//ADDX immediate
 	else if (is == 104) {
 		x += os;
@@ -376,8 +376,9 @@ void SUBr() {
 		x -= mem[sp + os + x];
 	}
 	//SUBX sfx
-	else if (is == 127){
+	else if (is == 127) {
 		x -= mem[mem[sp + os] + x];
+	}
 }
 void ASLr() {
 	//0000 1010
@@ -744,7 +745,7 @@ void CALL() {
 	}
 	//0010 0101
 	else { //is == 37, indexed
-		sp - = 2;
+		sp -= 2;
 		mem[sp] = pc;
 		pc = mem[os + x];
 	}
