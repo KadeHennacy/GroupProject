@@ -12,6 +12,7 @@ void memDump(void) {
 			printf("\nmem[%d]:%x", j, mem[j]);
 		}
 	}
+	printf("\nN: %d, Z: %d, V: %d, C: %d", n, z, v, c);
 }
 
 //######part 2######//
@@ -270,6 +271,28 @@ void LDWr() {
 		else {
 			a = mem[os + sp] * 256 + mem[os + sp + 1];
 		}
+		//handle status bits, copied from addr()
+		if (a > 65535) {
+			printf("C is set to 1\n");
+			c = 1;
+			a -= 65536;
+			n = z = v = 0;
+			printf("test");
+		}
+		else if (a > 32767) {
+			printf("N set to 1\n");
+			n = 1;
+			z = c = v = 0;
+		}
+		else if (a == 0) {
+			printf("Z set to 1\n");
+			z = 1;
+			n = c = v = 0;
+		}
+		else if (a <= -32768) {
+			printf("V set to 1\n");
+			v = 1;
+		}
 	}
 
 	//from ldbr, just to look at
@@ -500,6 +523,28 @@ void ADDr() {
 	//ADDA immediate tesed, works
 	if (is == 96) {
 		a += os;
+		if (a > 65535) {
+			printf("C is set to 1\n");
+			c = 1;
+			a -= 65536;
+			n = z = v = 0;
+			printf("test");
+		}
+		else if (a > 32767) {
+			printf("N set to 1\n");
+			n = 1;
+			z = c = v = 0;
+		}
+		else if (a == 0) {
+			printf("Z set to 1\n");
+			z = 1;
+			n = c = v = 0;
+		}
+		else if (a <= -32768) {
+			printf("V set to 1\n");
+			v = 1;
+		}
+		
 	}
 	//ADDA direct
 	else if (is == 97) {
@@ -678,14 +723,17 @@ void DECI() {
 			if (mem[os] < 0) {
 				printf("N set to 1\n");
 				n = 1;
+				v = z = c = 0;
 			}
 			else if (mem[os] == 0) {
 				printf("Z set to 1\n");
 				z = 1;
+				v = c = n = 0;
 			}
 			else if (mem[os] <= -32768 || mem[os] >= 32767) {
 				printf("V set to 1\n");
 				v = 1;
+				c = n = z = 0;
 			}
 			//convert to word after setting bits so I don't have to convert it to decimal for each comparison
 			mem[os + 1] = mem[os] % 256;
@@ -889,7 +937,10 @@ void BRNE() {
 void BRGE() {
 	//0001 1100 tested, works
 	if (is == 28) {
-		if (a > 0) {
+		/*if (a > 0) {
+			pc = os - 1;
+		}*/
+		if (n == 0) {
 			pc = os - 1;
 		}
 	}
@@ -939,217 +990,246 @@ void NEGr() {
 	}
 }
 void CPWr() {
-	int T;
+	n, z, v, c = 0;
 	//1010 raaa all
-	//CPWA i
+	//CPWA i = 160
+	//testing, works
 	if (is == 160) {
-		T = a - os;
-		if (T < 0) {
-			//n bit = 1
+		if (a - os > 0) {
+			printf("C is set to 1\n");
+			c = 1;
 		}
-		else if (T == 0) {
-			//z bit = 1
+		if (a - os < 0) {
+			printf("N set to 1\n");
+			n = 1;
 		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWA d
-	else if (is == 161) {
-		T = a - mem[os];
-		if (T < 0) {
-			//n bit = 1
+		if (a - os == 0) {
+			printf("Z and C set to 1\n");
+			z = 1;
+			c = 1;
 		}
-		else if (T == 0) {
-			//z bit = 1
+		if (a == 32768 && os == 32768) {
+			printf("V set to 1\n");
+			v = 1;
+			n = 1;
 		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWA n
-	else if (is == 162) {
-		T = a - mem[mem[os]];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWA s
-	else if (is == 163) {
-		T = a - mem[sp + os];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWA sf
-	else if (is == 164) {
-		T = a - mem[mem[sp + os]];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWA x
-	else if (is == 165){
-		T = a - mem[os + x];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWA sx
-	else if (is == 166){
-		T = a - mem[sp + os + x];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWA sfx
-	else if (is == 167){
-		T = a - mem[mem[sp + os] + x];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
 	}
 
-	//CPWX i
-	if (is == 168) {
-		T = x - os;
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWX d
-	else if (is == 169) {
-		T = x - mem[os];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWX n
-	else if (is == 170) {
-		T = x - mem[mem[os]];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWX s
-	else if (is == 171) {
-		T = x - mem[sp + os];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWX sf
-	else if (is == 172) {
-		T = x - mem[mem[sp + os]];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWX x
-	else if (is == 173) {
-		T = x - mem[os + x];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWX sx
-	else if (is == 174) {
-		T = x - mem[sp + os + x];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
-	//CPWX sfx
-	else if (is == 175) {
-		T = x - mem[mem[sp + os] + x];
-		if (T < 0) {
-			//n bit = 1
-		}
-		else if (T == 0) {
-			//z bit = 1
-		}
-		//v bit = overflow 
-		//c bit = carry
-		//n bit = n ^ v
-	}
+
+
+
+	//kirias
+	//int T;
+	////1010 raaa all
+	////CPWA i
+	//if (is == 160) {
+	//	T = a - os;
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWA d
+	//else if (is == 161) {
+	//	T = a - mem[os];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWA n
+	//else if (is == 162) {
+	//	T = a - mem[mem[os]];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWA s
+	//else if (is == 163) {
+	//	T = a - mem[sp + os];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWA sf
+	//else if (is == 164) {
+	//	T = a - mem[mem[sp + os]];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWA x
+	//else if (is == 165){
+	//	T = a - mem[os + x];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWA sx
+	//else if (is == 166){
+	//	T = a - mem[sp + os + x];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWA sfx
+	//else if (is == 167){
+	//	T = a - mem[mem[sp + os] + x];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+
+	////CPWX i
+	//if (is == 168) {
+	//	T = x - os;
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWX d
+	//else if (is == 169) {
+	//	T = x - mem[os];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWX n
+	//else if (is == 170) {
+	//	T = x - mem[mem[os]];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWX s
+	//else if (is == 171) {
+	//	T = x - mem[sp + os];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWX sf
+	//else if (is == 172) {
+	//	T = x - mem[mem[sp + os]];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWX x
+	//else if (is == 173) {
+	//	T = x - mem[os + x];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWX sx
+	//else if (is == 174) {
+	//	T = x - mem[sp + os + x];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
+	////CPWX sfx
+	//else if (is == 175) {
+	//	T = x - mem[mem[sp + os] + x];
+	//	if (T < 0) {
+	//		//n bit = 1
+	//	}
+	//	else if (T == 0) {
+	//		//z bit = 1
+	//	}
+	//	//v bit = overflow 
+	//	//c bit = carry
+	//	//n bit = n ^ v
+	//}
 }
 void CPBr() {
 	//1011 raaa all
