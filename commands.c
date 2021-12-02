@@ -262,6 +262,27 @@ void LDWr() {
 	if (is == 194) {
 		a = mem[mem[os] * 256 + mem[os + 1]] * 256 + mem[mem[os] * 256 + mem[os + 1] + 1];
 	}
+	//LDWA s
+	if (is == 195) {
+		if (os > 32767) {
+			a = mem[os - 65536]
+		}
+		else {
+			a =
+		}
+	}
+
+	//STWA s tested, works
+	if (is == 227) {
+		if (os > 32767) {
+			mem[sp + os - 65536] = a / 256;
+			mem[sp + os - 65535] = a % 256;
+		}
+		else {
+			mem[sp + os] = a / 256;
+			mem[sp + os + 1] = a % 256;
+		}
+	}
 
 
 	//from ldbr
@@ -357,12 +378,16 @@ void STWr() {
 		mem[mem[os] * 256 + mem[os + 1]] = a / 256;
 		mem[mem[os] * 256 + mem[os + 1] + 1] = a % 256;
 	}
-	//STWA s
+	//STWA s tested, works
 	if (is == 227) {
 		if (os > 32767) {
-			mem[sp + os - 65536] = a;
+			mem[sp + os - 65536] = a / 256;
+			mem[sp + os - 65535] = a % 256;
 		}
-		else mem[sp + os] = a;
+		else {
+			mem[sp + os] = a / 256;
+			mem[sp + os + 1] = a % 256;
+		}
 	}
 	//STWA sf
 	if (is == 228) {
