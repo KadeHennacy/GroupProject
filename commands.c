@@ -887,10 +887,10 @@ void BRNE() {
 	}
 }
 void BRGE() {
-	//0001 1100
+	//0001 1100 tested, works
 	if (is == 28) {
-		if (a < 0) {
-			pc = os;
+		if (a > 0) {
+			pc = os - 1;
 		}
 	}
 	//0001 1101
@@ -903,11 +903,11 @@ void BRGE() {
 void BRGT() {
 	//0001 1110
 	if (is == 30) {
-		if (a <= 0) {
+		if (a >= 0) {
 			pc = os;
 		}
 	}
-	//0001 1111
+	//0001 1111 stack relative
 	else { //is == 31
 		if (a <= 0) {
 			pc = mem[os + x];
