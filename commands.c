@@ -582,12 +582,18 @@ void SUBr() {
 	}
 	//SUBA n
 	else if (is == 114) {
-		a -= mem[mem[os]];
+		a -= mem[mem[os] * 256 + mem[os + 1]] * 256 + mem[mem[os] * 256 + mem[os + 1] + 1];
 	}
 	//SUBA s
 	else if (is == 115) {
-		a -= mem[sp + os];
+		if (os > 32767) {
+			a += mem[os - 65536 + sp] * 256 + mem[os - 65536 + sp + 1];
+		}
+		else a += mem[os + sp] * 256 + mem[os + sp + 1];
 	}
+
+	////these ^ should work b/c same as addr. Havent tested rest./////
+	
 	//SUBA sf
 	else if (is == 116) {
 		a -= mem[mem[sp + os]];
@@ -663,7 +669,111 @@ void ASRr() {
 	}
 }
 void DECI() {
+	printf("Enter Input:");
 	//0011 0aaa all but i
+	//DECI d = 49
+	if (is == 49) {
+		if (scanf("%d", &mem[os]) > 0) {
+			printf("You entered %d\n", mem[os]);
+			if (mem[os] < 0) {
+				printf("N set to 1\n");
+				n = 1;
+			}
+			else if (mem[os] == 0) {
+				printf("Z set to 1\n");
+				z = 1;
+			}
+			else if (mem[os] <= -32768 || mem[os] >= 32767) {
+				printf("V set to 1\n");
+				v = 1;
+			}
+		}
+		else printf("You didn't enter a decimal.\n");
+	}
+	//DECI n = 50
+	if (is == 50) {
+		if (scanf("%d", &x) > 0) {
+			printf("You entered %d\n", x);
+			//ensure user doesn't enter more than a byte
+			x = x % 256;
+		}
+		else printf("You didn't enter anything.\n");
+	}
+	//DECI s = 51
+	if (is == 51) {
+		if (scanf("%d", &x) > 0) {
+			printf("You entered %d\n", x);
+			//ensure user doesn't enter more than a byte
+			x = x % 256;
+		}
+		else printf("You didn't enter anything.\n");
+	}
+	//DECI sf = 52
+	if (is == 52) {
+		if (scanf("%d", &x) > 0) {
+			printf("You entered %d\n", x);
+			//ensure user doesn't enter more than a byte
+			x = x % 256;
+		}
+		else printf("You didn't enter anything.\n");
+	}
+
+
+
+	//from ldbr
+	//LDBX d = 1101 1001 = D9 = 217
+	if (is == 217) {
+		//fc15 is input device
+		if (os == 64533) {
+			printf("Enter Input: ");
+			if (scanf("%d", &x) > 0) {
+				printf("You entered %d\n", x);
+				//ensure user doesn't enter more than a byte
+				x = x % 256;
+			}
+			else printf("You didn't enter anything.\n");
+		}
+		else x = mem[os] % 256;
+	}
+
+	//from deco, just to look at
+	int word = mem[os] * 256 + mem[os + 1];
+	//DECO i = 0011 1000 = 38 = 56
+	if (is == 56) {
+		//if OS is negative
+		if (os > 32767) {
+			printf("%d", -65536 + os);
+		}
+		else printf("%d", os);
+	}
+	//DECO d = 0011 1001 = 39 = 57
+	if (is == 57) {
+		//if mem[os] is negative
+		if (word > 32767) {
+			printf("%d", -65536 + word);
+		}
+		else printf("%d", word);
+	}
+	//DECO n = 0011 1010 = 3A = 58
+	if (is == 58) {
+		//word = mem[mem[os - 1] * 256 + mem[os] - 1] * 256 + mem[mem[os - 1] * 256 + mem[os]]; doesn't work for most cases.
+		word = mem[mem[os] * 256 + mem[os + 1]] * 256 + mem[mem[os] * 256 + mem[os + 1] + 1];
+		if (word > 32767) {
+			printf("%d", -65536 + word);
+		}
+		else printf("%d", word);
+	}
+	//DECO s = 0011 1011 = 3B = 59
+	if (is == 59) {
+		if (os > 32767) {
+			printf("%d", mem[os - 65536 + sp] * 256 + mem[os - 65536 + sp + 1]);
+		}
+		else printf("%d", mem[os + sp] * 256 + mem[os + sp + 1]);
+	}
+	//DECO sf = 0011 1100 = 3C = 60
+	if (is == 60) {
+		//if()test
+	}
 }
 void STRO() {
 	//0100 1aaa d,n,s,sf,x

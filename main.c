@@ -14,8 +14,8 @@
 #include "commands.h"
 //an array of integers that simulates Pep/9 main memory
 int mem[65536];
-//index for loader traversing mem, program counter, stack pointer, instruction specifier, operand specifier, accumulator, index register
-int i, pc, sp, is, os, a, x;
+//index for loader traversing mem, program counter, stack pointer, instruction specifier, operand specifier, accumulator, index register, NZVC bits
+int i, pc, sp, is, os, a, x, n, z, v, c;
 
 int main() {
 	//load the machine language program from input.pepo into mem. Best practices would be to make a separate function for this loader, but I can't get a file to work as an arguament at all.
