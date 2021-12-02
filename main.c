@@ -5,7 +5,7 @@
 * CSCI 220
 * Group Project
 *
-* Describe program here
+* This simulates a computer at level ISA3. It loads and executes instructions written in hexadecimal. Mem simulates the computers memory and the global variables simulate the CPU registers. The hexadecimal instructions are loaded from input.pepo into mem. The for loop in main simulates the von Neumann cycle, which increments through the memory and executes the specified instructions. To use this, use the pep/9 instruction reference to write a program in input.pepo. If you aren't familiar with writing hexadecimal instructions, it's helpful to use the pep/9 simulator to convert assembly instructions to hexadecimal object code.
 */
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>

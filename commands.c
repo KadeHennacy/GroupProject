@@ -96,8 +96,9 @@ void LDBr() {
 		//fc15 is input device
 		if (os == 64533) {
 			printf("Enter Input: ");
-			if (scanf("%d", &a) > 0) {
-				printf("You entered %d\n", a);
+			//store as character
+			if (scanf("%c", &a) > 0) {
+				printf("You entered %c\n", a);
 				//ensure user doen't enter more than a byte
 				a = a % 256;
 			}
@@ -203,6 +204,7 @@ void DECO() {
 	}
 	//DECO n = 0011 1010 = 3A = 58
 	if (is == 58) {
+		//word = mem[mem[os - 1] * 256 + mem[os] - 1] * 256 + mem[mem[os - 1] * 256 + mem[os]]; doesn't work for most cases.
 		word = mem[mem[os] * 256 + mem[os + 1]] * 256 + mem[mem[os] * 256 + mem[os + 1] + 1];
 		if (word > 32767) {
 			printf("%d", -65536 + word);
@@ -237,26 +239,32 @@ void BR() {
 	}
 }
 void LDWr() {
-	//from ldbr
-	//LDBA i = 1101 0000 = D0 = 208
-	if (is == 208) {
-		//only rightmost byte
-		a = os % 256;
+	//1100 raaa all
+	//at part 4 we need i, d, s
+	//int word = mem[os] * 256 + mem[os + 1];
+	//LDWA i = 1100 0000 = 192 tested, works
+	if (is == 192) {
+		a = os;
 	}
-	//LDBA d = 1101 0001 = D1 = 209
-	if (is == 209) {
-		//fc15 is input device
+	//LDWA d = 1100 0001 = 193
+	if (is == 193) {
 		if (os == 64533) {
 			printf("Enter Input: ");
-			if (scanf("%d", &a) > 0) {
-				printf("You entered %d\n", a);
-				//ensure user doen't enter more than a byte
-				a = a % 256;
+			//store as character
+			if (scanf("%c", &a) > 0) {
+				printf("You entered %c\n", a);
 			}
 			else printf("You didn't enter anything.\n");
 		}
-		else a = mem[os] % 256;
+		else a = mem[os] * 256 + mem[os + 1];
 	}
+	//LDWA n tested, works
+	if (is == 194) {
+		a = mem[mem[os] * 256 + mem[os + 1]] * 256 + mem[mem[os] * 256 + mem[os + 1] + 1];
+	}
+
+
+	//from ldbr
 	//LDBA n = 1101 0010 = D2 = 210
 	if (is == 210) {
 		a = mem[mem[os]] % 256;
@@ -330,43 +338,24 @@ void LDWr() {
 	if (is == 223) {
 		x = mem[mem[sp + os] + x] % 256;
 	}
-
-
-	//1100 raaa all
-	//at part 4 we need i, d, s
-	//int word = mem[os] * 256 + mem[os + 1];
-	//LDWA i = 1100 0000 = 192
-	if (is == 192) {
-		a = mem[os] * 256 + mem[os + 1];
-	}
-	//LDWA d = 1100 0001 = 193
-	if (is == 193) {
-		if (os == 64533) {
-			printf("Enter Input: ");
-			if (scanf("%d", &a) > 0) {
-				printf("You entered %d\n", a);
-				//ensure user doen't enter more than a byte
-				a = a % 256;
-			}
-			else printf("You didn't enter anything.\n");
-		}
-		else a = mem[os] % 256;
-	}
-
 }
 void STWr() {
 	//1110 raaa all but i
-	//same as stbr without the mod
-	
-	//STWA d
+	//same as stbr without the mod. Haven't tested cuz it should work since STBr works.
+	//STWA d tested, works
 	if (is == 225) {
-		//fc16 is output device
+		//stba will output the value of the byte in the word, stwa outputs the first byte. So divide it by 256.
 		if (os == 64534) printf("%c", a);
-		else mem[os] = a;
+		//+1 fixes off by 1 error
+		else {
+			mem[os] = a / 256;
+			mem[os + 1] = a % 256;
+		}
 	}
-	//STWA n
+	//STWA n tested, works
 	if (is == 226) {
-		mem[mem[os]] = a;
+		mem[mem[os] * 256 + mem[os + 1]] = a / 256;
+		mem[mem[os] * 256 + mem[os + 1] + 1] = a % 256;
 	}
 	//STWA s
 	if (is == 227) {
