@@ -268,7 +268,7 @@ void LDWr() {
 			a = mem[os - 65536 + sp] * 256 + mem[os - 65535 + sp];
 		}
 		else {
-			a = mem[os + sp] * 256 + mem[os]
+			a = mem[os + sp] * 256 + mem[os + sp + 1];
 		}
 	}
 
