@@ -894,17 +894,23 @@ void BRLE() {
 }
 void BRLT() {
 	//0001 0110
-	if (is == 22) { //immedate 
-		if ( a >= 0){
-			pc = os;
-		}
+	
+	if (n == 1) {
+		pc = os - 1;
 	}
-	//0001 0111
-	else { // is == 23, indexed
-		if( a >= 0){ 
-			pc = mem[os + x];
-		}
-	}
+	
+	// kyrias
+	//if (is == 22) { //immedate 
+	//	if ( a >= 0){
+	//		pc = os;
+	//	}
+	//}
+	////0001 0111
+	//else { // is == 23, indexed
+	//	if( a >= 0){ 
+	//		pc = mem[os + x];
+	//	}
+	//}
 }
 void BREQ() {
 	//0001 1000
@@ -937,9 +943,6 @@ void BRNE() {
 void BRGE() {
 	//0001 1100 tested, works
 	if (is == 28) {
-		/*if (a > 0) {
-			pc = os - 1;
-		}*/
 		if (n == 0) {
 			pc = os - 1;
 		}
