@@ -894,11 +894,11 @@ void BRLE() {
 }
 void BRLT() {
 	//0001 0110
-	
-	if (n == 1) {
-		pc = os - 1;
+	if (is == 22){
+		if (n == 1) {
+			pc = os - 1;
+		}
 	}
-	
 	// kyrias
 	//if (is == 22) { //immedate 
 	//	if ( a >= 0){
@@ -914,31 +914,40 @@ void BRLT() {
 }
 void BREQ() {
 	//0001 1000
-	if (is == 24) { //immediate
-		if (a != 0) {
-			pc = os;
+	if (is == 24) {
+		if (z == 1) {
+			pc = os - 1;
 		}
 	}
-	//0001 1001
-	else { //is == 25, indexed
-		if (a != 0) {
-			pc = mem[os + x];
-		}
-	}
+
+	//kyrias
+	//if (is == 24) { //immediate
+	//	if (a != 0) {
+	//		pc = os;
+	//	}
+	//}
+	////0001 1001
+	//else { //is == 25, indexed
+	//	if (a != 0) {
+	//		pc = mem[os + x];
+	//	}
+	//}
 }
 void BRNE() {
 	//0001 1010
-	if (is == 26) { //immediate
-		if (a == 0) {
-			pc = os;
-		}
-	}
-	//0001 1011
-	else { //is == 27, indexed
-		if (a == 0) {
-			pc = mem[os + x];
-		}
-	}
+	if 
+	//kyrias
+	//if (is == 26) { //immediate
+	//	if (a == 0) {
+	//		pc = os;
+	//	}
+	//}
+	////0001 1011
+	//else { //is == 27, indexed
+	//	if (a == 0) {
+	//		pc = mem[os + x];
+	//	}
+	//}
 }
 void BRGE() {
 	//0001 1100 tested, works
