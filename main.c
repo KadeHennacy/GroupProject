@@ -107,8 +107,11 @@ int main() {
 		is = mem[pc];
 		//operand specifier is the next 2 bytes. Convert them and store in os the decimal value.
 		os = (mem[pc + 1] / 16) * 4096 + (mem[pc + 1] % 16) * 256 + (mem[pc + 2] / 16) * 16 + mem[pc + 2] % 16;
-		//increment pc
-		pc += 2;
+		//increment pc an addional two places if it isn't a unary instruction
+		if (is > 17) {
+			pc += 2;
+		}
+		
 
 		//execute instruction fetched
 

@@ -658,9 +658,9 @@ void ASLr() {
 }
 void ASRr() {
 	//0000 1100
-	if (is = 12) {
+	if (is == 12) {
 		//perform an Arithmetic Shift Right on the value in the Accumulator
-		a = a / 2;
+		a /= 2;
 	}
 	//0000 1101
 	else {
@@ -671,7 +671,7 @@ void ASRr() {
 void DECI() {
 	printf("Enter Input:");
 	//0011 0aaa all but i
-	//DECI d = 49
+	//DECI d = 49, tested, works
 	if (is == 49) {
 		if (scanf("%d", &mem[os]) > 0) {
 			printf("You entered %d\n", mem[os]);
@@ -696,43 +696,47 @@ void DECI() {
 	//DECI n = 50
 	if (is == 50) {
 	}
-	//DECI s = 51
+	//DECI s = 51, tested, works
 	if (is == 51) {
-		if (scanf("%d", &mem[sp + os - 65546]) > 0) {
-			printf("You entered %d\n", mem[sp + os - 65546]);
-			if (mem[sp + os - 65546] < 0) {
+		if (os > 32767) {
+			if (scanf("%d", &mem[sp + os - 65546]) > 0) {
+				printf("You entered %d\n", mem[sp + os - 65546]);
+				if (mem[sp + os - 65546] < 0) {
+					printf("N set to 1\n");
+					n = 1;
+				}
+				else if (mem[sp + os - 65546] == 0) {
+					printf("Z set to 1\n");
+					z = 1;
+				}
+				else if (mem[sp + os - 65546] <= -32768 || mem[sp + os - 65546] >= 32767) {
+					printf("V set to 1\n");
+					v = 1;
+				}
+				//convert to word
+				mem[sp + os - 65545] = mem[sp + os - 65546] % 256;
+				mem[sp + os - 65546] /= 256;
+			}
+		}
+		else if (scanf("%d", &mem[sp + os]) > 0) {
+			printf("You entered %d\n", mem[sp + os]);
+			if (mem[sp + os] < 0) {
 				printf("N set to 1\n");
 				n = 1;
 			}
-			else if (mem[sp + os - 65546] == 0) {
+			else if (mem[sp + os] == 0) {
 				printf("Z set to 1\n");
 				z = 1;
 			}
-			else if (mem[sp + os - 65546] <= -32768 || mem[sp + os - 65546] >= 32767) {
+			else if (mem[sp + os] <= -32768 || mem[sp + os] >= 32767) {
 				printf("V set to 1\n");
 				v = 1;
 			}
 			//convert to word
-			if (os > 32767) {
-				mem[sp + os - 65545] = mem[sp + os - 65546] % 256;
-				mem[sp + os - 65546] /= 256;
-			}
-			else {
-				mem[sp + os + 1] = mem[sp + os] % 256;
-				mem[sp + os] /= 256;
-			}
-
+			mem[sp + os + 1] = mem[sp + os] % 256;
+			mem[sp + os] /= 256;
 		}
 		else printf("You didn't enter anything.\n");
-
-		/*if (os > 32767) {
-			mem[sp + os - 65536] = a / 256;
-			mem[sp + os - 65535] = a % 256;
-		}
-		else {
-			mem[sp + os] = a / 256;
-			mem[sp + os + 1] = a % 256;
-		}*/
 	}
 	//DECI sf = 52
 	if (is == 52) {
@@ -816,6 +820,14 @@ void DECI() {
 }
 void STRO() {
 	//0100 1aaa d,n,s,sf,x
+	//stro d tested, works
+	if (is == 73) {
+		for(int k = os; mem[k] != 0; k++){
+			printf("%c", mem[k]);
+			//subtracting i wont be neccesary once I enable the stop function, but this will stop it trying to read characters as instructions after it should have stopped.
+			i--;
+		}
+	}
 }
 //######Part 6######//
 void BRLE() {
