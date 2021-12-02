@@ -180,7 +180,7 @@ int main() {
 			ASRr();
 		}
 		//DECI 0011 0aaa all but i
-		else if (is >= 49 && is <= 49) {
+		else if (is >= 49 && is <= 55) {
 			DECI();
 		}
 		//STRO 0100 1aaa d,n,s,sf,x

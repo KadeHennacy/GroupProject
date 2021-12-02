@@ -687,26 +687,52 @@ void DECI() {
 				printf("V set to 1\n");
 				v = 1;
 			}
+			//convert to word after setting bits so I don't have to convert it to decimal for each comparison
+			mem[os + 1] = mem[os] % 256;
+			mem[os] /= 256;
 		}
 		else printf("You didn't enter a decimal.\n");
 	}
 	//DECI n = 50
 	if (is == 50) {
-		if (scanf("%d", &x) > 0) {
-			printf("You entered %d\n", x);
-			//ensure user doesn't enter more than a byte
-			x = x % 256;
-		}
-		else printf("You didn't enter anything.\n");
 	}
 	//DECI s = 51
 	if (is == 51) {
-		if (scanf("%d", &x) > 0) {
-			printf("You entered %d\n", x);
-			//ensure user doesn't enter more than a byte
-			x = x % 256;
+		if (scanf("%d", &mem[sp + os - 65546]) > 0) {
+			printf("You entered %d\n", mem[sp + os - 65546]);
+			if (mem[sp + os - 65546] < 0) {
+				printf("N set to 1\n");
+				n = 1;
+			}
+			else if (mem[sp + os - 65546] == 0) {
+				printf("Z set to 1\n");
+				z = 1;
+			}
+			else if (mem[sp + os - 65546] <= -32768 || mem[sp + os - 65546] >= 32767) {
+				printf("V set to 1\n");
+				v = 1;
+			}
+			//convert to word
+			if (os > 32767) {
+				mem[sp + os - 65545] = mem[sp + os - 65546] % 256;
+				mem[sp + os - 65546] /= 256;
+			}
+			else {
+				mem[sp + os + 1] = mem[sp + os] % 256;
+				mem[sp + os] /= 256;
+			}
+
 		}
 		else printf("You didn't enter anything.\n");
+
+		/*if (os > 32767) {
+			mem[sp + os - 65536] = a / 256;
+			mem[sp + os - 65535] = a % 256;
+		}
+		else {
+			mem[sp + os] = a / 256;
+			mem[sp + os + 1] = a % 256;
+		}*/
 	}
 	//DECI sf = 52
 	if (is == 52) {
@@ -720,21 +746,34 @@ void DECI() {
 
 
 
-	//from ldbr
-	//LDBX d = 1101 1001 = D9 = 217
-	if (is == 217) {
-		//fc15 is input device
-		if (os == 64533) {
-			printf("Enter Input: ");
-			if (scanf("%d", &x) > 0) {
-				printf("You entered %d\n", x);
-				//ensure user doesn't enter more than a byte
-				x = x % 256;
-			}
-			else printf("You didn't enter anything.\n");
+	//from stwr
+	//direct
+	if (is == 225) {
+		//stba will output the value of the byte in the word, stwa outputs the first byte. So divide it by 256.
+		if (os == 64534) printf("%c", a);
+		//+1 fixes off by 1 error
+		else {
+			mem[os] = a / 256;
+			mem[os + 1] = a % 256;
 		}
-		else x = mem[os] % 256;
 	}
+	//STWA n tested, works
+	if (is == 226) {
+		mem[mem[os] * 256 + mem[os + 1]] = a / 256;
+		mem[mem[os] * 256 + mem[os + 1] + 1] = a % 256;
+	}
+	//STWA s tested, works
+	if (is == 227) {
+		if (os > 32767) {
+			mem[sp + os - 65536] = a / 256;
+			mem[sp + os - 65535] = a % 256;
+		}
+		else {
+			mem[sp + os] = a / 256;
+			mem[sp + os + 1] = a % 256;
+		}
+	}
+
 
 	//from deco, just to look at
 	int word = mem[os] * 256 + mem[os + 1];
