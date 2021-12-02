@@ -180,11 +180,11 @@ int main() {
 			ASRr();
 		}
 		//DECI 0011 0aaa all but i
-		else if (is >= 49 || is <= 49) {
+		else if (is >= 49 && is <= 55) {
 			DECI();
 		}
 		//STRO 0100 1aaa d,n,s,sf,x
-		else if (is >= 73 || is <= 77) {
+		else if (is >= 73 && is <= 77) {
 			STRO();
 		}
 		//######Part 6######//
@@ -234,11 +234,11 @@ int main() {
 			NEGr();
 		}
 		//1010 raaa all cpwr
-		else if (is >= 160 || is <= 175) {
+		else if (is >= 160 && is <= 175) {
 			CPWr();
 		}
 		//1011 raaa all cpbr
-		else if (is >= 176|| is <= 191) {
+		else if (is >= 176 && is <= 191) {
 			CPBr();
 		}
 		//######Part 7######//
