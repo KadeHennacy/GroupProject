@@ -262,7 +262,7 @@ void LDWr() {
 	if (is == 194) {
 		a = mem[mem[os] * 256 + mem[os + 1]] * 256 + mem[mem[os] * 256 + mem[os + 1] + 1];
 	}
-	//LDWA s
+	//LDWA s tested, works
 	if (is == 195) {
 		if (os > 32767) {
 			a = mem[os - 65536 + sp] * 256 + mem[os - 65535 + sp];
@@ -272,20 +272,7 @@ void LDWr() {
 		}
 	}
 
-	//STWA s tested, works
-	if (is == 227) {
-		if (os > 32767) {
-			mem[sp + os - 65536] = a / 256;
-			mem[sp + os - 65535] = a % 256;
-		}
-		else {
-			mem[sp + os] = a / 256;
-			mem[sp + os + 1] = a % 256;
-		}
-	}
-
-
-	//from ldbr
+	//from ldbr, just to look at
 	//LDBA n = 1101 0010 = D2 = 210
 	if (is == 210) {
 		a = mem[mem[os]] % 256;
@@ -441,9 +428,71 @@ void STWr() {
 }
 void SUBSP() {
 	//0101 1aaa all
+	if (is == 88) {
+		sp = sp - os;
+	}
+	//SUBSP d = 0101 1001 = 89
+	else if (is == 89) {
+		sp = sp - mem[os];
+	}
+	//SUBSP n = 0101 1010 = 90
+	else if (is == 90) {
+		sp = sp - mem[mem[os]];
+	}
+	//SUBSP s = 0101 1011 = 91
+	else if (is == 91) {
+		sp = sp - mem[sp + os];
+	}
+	//SUBSP sf = 0101 1100 = 92
+	else if (is == 92) {
+		sp = sp - mem[mem[sp + os]];
+	}
+	//SUBSP x = 0101 1101 = 93
+	else if (is == 93) {
+		sp = sp - mem[os + x];
+	}
+	//SUBSP sx = 0101 1110 = 94
+	else if (is == 94) {
+		sp = sp - mem[sp + os + x];
+	}
+	//SUBSP sfx = 0101 0111 = 95
+	else {
+		sp = sp - mem[mem[sp + os] + x];
+	}
 }
 void ADDSP() {
 	//0101 0aaa all
+	if (is == 80) {
+		sp = sp + os;
+	}
+	//ADDSP d = 0101 0001 = 81
+	else if (is == 81) {
+		sp = sp + mem[os];
+	}
+	//ADDSP n = 0101 0010 = 82
+	else if (is == 82) {
+		sp = sp + mem[mem[os]];
+	}
+	//ADDSP s = 0101 0011 = 83
+	else if (is == 83) {
+		sp = sp + mem[sp + os];
+	}
+	//ADDSP sf = 0101 0100 = 84
+	else if (is == 84) {
+		sp = sp + mem[mem[sp + os]];
+	}
+	//ADDSP x = 0101 0101 = 85
+	else if (is == 85) {
+		sp = sp + mem[os + x];
+	}
+	//ADDSP sx = 0101 0110 = 86
+	else if (is == 86) {
+		sp = sp + mem[sp + os + x];
+	}
+	//ADDSP sfx = 0101 0111 = 87
+	else {
+		sp = sp + mem[mem[sp + os] + x];
+	}
 }
 //######Part 5######//
 void ADDr() {

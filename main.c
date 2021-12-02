@@ -127,7 +127,7 @@ int main() {
 			printf("Error. cannot STBr with immdediate addressing");
 		}
 		//LDBA i = 1101 0000 = D0 = 208 | LDBA d = 1101 0001 = D1 = 209 | LDBX i = 1101 1000 = D8 = 216 | LDBX d = 1101 1001 = D9 = 217
-		else if (is == 208 || is == 209 || is == 216 || is == 217) {
+		else if (is >= 208 && is <= 223) {
 			LDBr();
 		}
 
