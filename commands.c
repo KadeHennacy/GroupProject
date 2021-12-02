@@ -578,7 +578,7 @@ void SUBr() {
 	}
 	//SUBA direct
 	else if (is == 113) {
-		a -= mem[os];
+		a -= mem[os + 1];
 	}
 	//SUBA n
 	else if (is == 114) {
