@@ -265,10 +265,10 @@ void LDWr() {
 	//LDWA s
 	if (is == 195) {
 		if (os > 32767) {
-			a = mem[os - 65536]
+			a = mem[os - 65536 + sp] * 256 + mem[os - 65535 + sp];
 		}
 		else {
-			a =
+			a = mem[os + sp] * 256 + mem[os]
 		}
 	}
 
