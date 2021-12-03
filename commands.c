@@ -717,17 +717,14 @@ void DECI() {
 		if (scanf("%d", &mem[os]) > 0) {
 			printf("You entered %d\n", mem[os]);
 			if (mem[os] < 0) {
-				printf("N set to 1\n");
 				n = 1;
 				v = z = c = 0;
 			}
 			else if (mem[os] == 0) {
-				printf("Z set to 1\n");
 				z = 1;
 				v = c = n = 0;
 			}
 			else if (mem[os] <= -32768 || mem[os] >= 32767) {
-				printf("V set to 1\n");
 				v = 1;
 				c = n = z = 0;
 			}
@@ -746,15 +743,12 @@ void DECI() {
 			if (scanf("%d", &mem[sp + os - 65546]) > 0) {
 				printf("You entered %d\n", mem[sp + os - 65546]);
 				if (mem[sp + os - 65546] < 0) {
-					printf("N set to 1\n");
 					n = 1;
 				}
 				else if (mem[sp + os - 65546] == 0) {
-					printf("Z set to 1\n");
 					z = 1;
 				}
 				else if (mem[sp + os - 65546] <= -32768 || mem[sp + os - 65546] >= 32767) {
-					printf("V set to 1\n");
 					v = 1;
 				}
 				//convert to word
@@ -765,15 +759,12 @@ void DECI() {
 		else if (scanf("%d", &mem[sp + os]) > 0) {
 			printf("You entered %d\n", mem[sp + os]);
 			if (mem[sp + os] < 0) {
-				printf("N set to 1\n");
 				n = 1;
 			}
 			else if (mem[sp + os] == 0) {
-				printf("Z set to 1\n");
 				z = 1;
 			}
 			else if (mem[sp + os] <= -32768 || mem[sp + os] >= 32767) {
-				printf("V set to 1\n");
 				v = 1;
 			}
 			//convert to word
@@ -1018,6 +1009,24 @@ void CPWr() {
 			c = 1;
 		}
 		if (a == 32768 && os == 32768) {
+			v = 1;
+			n = 1;
+		}
+	}
+	//CPWA d = 161
+	int word = mem[os] * 256 + mem[os + 1];
+	if (is == 161) {
+		if (a - word > 0) {
+			c = 1;
+		}
+		if (a - word < 0) {
+			n = 1;
+		}
+		if (a - word == 0) {
+			z = 1;
+			c = 1;
+		}
+		if (a == 32768 && word == 32768) {
 			v = 1;
 			n = 1;
 		}
