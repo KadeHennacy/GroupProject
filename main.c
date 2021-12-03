@@ -111,7 +111,9 @@ int main() {
 		if (is > 17) {
 			pc += 2;
 		}
-		
+		if (is == 217 || is == 193 || is == 209) {
+			if(os == )
+		}
 
 		//execute instruction fetched
 
@@ -119,7 +121,7 @@ int main() {
 
 		//this represents STOP()
 		if (is == 0) {
-			return 0; 
+			return 0;
 			//cant do mem dump if it actually stops. remember to uncomment.
 		}
 		//STBA i = 1111 0000 = F0 = 240 | STBA d = 1111 0001 = F1 = 241| STBX i = 1111 1000 = F8 = 248 | STBX d = 1111 1001 = F9 = 249
@@ -185,6 +187,7 @@ int main() {
 		}
 		//DECI 0011 0aaa all but i
 		else if (is >= 49 && is <= 55) {
+			printf("Enter Input: ");
 			DECI();
 		}
 		//STRO 0100 1aaa d,n,s,sf,x

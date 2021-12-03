@@ -96,14 +96,20 @@ void LDBr() {
 	if (is == 209) {
 		//fc15 is input device
 		if (os == 64533) {
-			printf("Enter Input: ");
+
+
+			//original input style, commented out for debugging
+			//printf("Enter Input: ");
 			//store as character
 			if (scanf("%c", &a) > 0) {
-				printf("You entered %c\n", a);
+				//printf("You entered %c\n", a);
 				//ensure user doen't enter more than a byte
 				a = a % 256;
 			}
 			else printf("You didn't enter anything.\n");
+
+
+
 		}
 		else a = mem[os] % 256;
 	}
@@ -273,24 +279,19 @@ void LDWr() {
 		}
 		//handle status bits, copied from addr()
 		if (a > 65535) {
-			printf("C is set to 1\n");
 			c = 1;
 			a -= 65536;
 			n = z = v = 0;
-			printf("test");
 		}
 		else if (a > 32767) {
-			printf("N set to 1\n");
 			n = 1;
 			z = c = v = 0;
 		}
 		else if (a == 0) {
-			printf("Z set to 1\n");
 			z = 1;
 			n = c = v = 0;
 		}
 		else if (a <= -32768) {
-			printf("V set to 1\n");
 			v = 1;
 		}
 	}
@@ -524,24 +525,19 @@ void ADDr() {
 	if (is == 96) {
 		a += os;
 		if (a > 65535) {
-			printf("C is set to 1\n");
 			c = 1;
 			a -= 65536;
 			n = z = v = 0;
-			printf("test");
 		}
 		else if (a > 32767) {
-			printf("N set to 1\n");
 			n = 1;
 			z = c = v = 0;
 		}
 		else if (a == 0) {
-			printf("Z set to 1\n");
 			z = 1;
 			n = c = v = 0;
 		}
 		else if (a <= -32768) {
-			printf("V set to 1\n");
 			v = 1;
 		}
 		
@@ -714,7 +710,6 @@ void ASRr() {
 	}
 }
 void DECI() {
-	printf("Enter Input:");
 	//0011 0aaa all but i
 	//DECI d = 49, tested, works
 	if (is == 49) {
@@ -873,7 +868,7 @@ void STRO() {
 		for(int k = os; mem[k] != 0; k++){
 			printf("%c", mem[k]);
 			//subtracting i wont be neccesary once I enable the stop function, but this will stop it trying to read characters as instructions after it should have stopped.
-			i--;
+			//i--;
 		}
 	}
 }
@@ -935,7 +930,11 @@ void BREQ() {
 }
 void BRNE() {
 	//0001 1010
-	if 
+	if (is == 26) {
+		if (z == 0) {
+			pc = os - 1;
+		}
+	}
 	//kyrias
 	//if (is == 26) { //immediate
 	//	if (a == 0) {
@@ -1008,20 +1007,16 @@ void CPWr() {
 	//testing, works
 	if (is == 160) {
 		if (a - os > 0) {
-			printf("C is set to 1\n");
 			c = 1;
 		}
 		if (a - os < 0) {
-			printf("N set to 1\n");
 			n = 1;
 		}
 		if (a - os == 0) {
-			printf("Z and C set to 1\n");
 			z = 1;
 			c = 1;
 		}
 		if (a == 32768 && os == 32768) {
-			printf("V set to 1\n");
 			v = 1;
 			n = 1;
 		}
@@ -1244,7 +1239,47 @@ void CPWr() {
 	//}
 }
 void CPBr() {
-	//1011 raaa all
+	//1011 raaa all ,  is >= 176 && is <= 191
+	//cpbr i = 1011 0000
+	//same as cpwr, but %256
+	if (is == 176) {
+		if (a - (os % 256) > 0) {
+			c = 1;
+		}
+		if (a - (os % 256) < 0) {
+			n = 1;
+		}
+		if (a - (os % 256) == 0) {
+			z = 1;
+			c = 1;
+		}
+		if (a == 32768 && (os % 256) == 32768) {
+			v = 1;
+			n = 1;
+		}
+	}
+
+	//cpwr i
+	/*if (is == 160) {
+		if (a - os > 0) {
+			printf("C is set to 1\n");
+			c = 1;
+		}
+		if (a - os < 0) {
+			printf("N set to 1\n");
+			n = 1;
+		}
+		if (a - os == 0) {
+			printf("Z and C set to 1\n");
+			z = 1;
+			c = 1;
+		}
+		if (a == 32768 && os == 32768) {
+			printf("V set to 1\n");
+			v = 1;
+			n = 1;
+		}
+	}*/
 }
 //######Part 7######//
 void CALL() {
