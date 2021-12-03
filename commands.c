@@ -7,12 +7,13 @@
 
 void memDump(void) {
 	//print the array as hex values. Only do ones that aren't zero for readability
+	printf("\n\nMEMORY DUMP:\n");
 	for (int j = 0; j < 65536; j++) {
 		if (mem[j] != 0) {
 			printf("\nmem[%d]:%x", j, mem[j]);
 		}
 	}
-	printf("\nN: %d, Z: %d, V: %d, C: %d", n, z, v, c);
+	printf("\n\nN: %d, Z: %d, V: %d, C: %d\n", n, z, v, c);
 }
 
 //######part 2######//
