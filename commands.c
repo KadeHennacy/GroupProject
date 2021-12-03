@@ -1001,7 +1001,7 @@ void NEGr() {
 	}
 }
 void CPWr() {
-	n, z, v, c = 0;
+	n = z = v = c = 0;
 	//1010 raaa all
 	//CPWA i = 160
 	//testing, works
@@ -1242,6 +1242,7 @@ void CPBr() {
 	//1011 raaa all ,  is >= 176 && is <= 191
 	//cpbr i = 1011 0000
 	//same as cpwr, but %256
+	n = z = v = c = 0;
 	if (is == 176) {
 		if (a - (os % 256) > 0) {
 			c = 1;
