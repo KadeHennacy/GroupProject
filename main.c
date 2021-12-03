@@ -14,12 +14,13 @@
 #include "commands.h"
 //an array of integers that simulates Pep/9 main memory
 int mem[65536];
-//index for loader traversing mem, program counter, stack pointer, instruction specifier, operand specifier, accumulator, index register, NZVC bits
-int i, pc, sp, is, os, a, x, n, z, v, c;
+//index for loader traversing mem, program counter, stack pointer, instruction specifier, operand specifier, accumulator, index register, NZVC bits, toggle to prevent multiple prompts for user input
+int i, pc, sp, is, os, a, x, n, z, v, c, t;
 
 int main() {
 	//load the machine language program from input.pepo into mem. Best practices would be to make a separate function for this loader, but I can't get a file to work as an arguament at all.
 	i = 0;
+	t = 0;
 	//variable to store a character. This is neccessary because the loader traverses one character at a time, but each integer in the file is two characters
 	char ch;
 	//This loader is based on the tutorial https://www.geeksforgeeks.org/basics-file-handling-c/
@@ -111,10 +112,14 @@ int main() {
 		if (is > 17) {
 			pc += 2;
 		}
-		if (is == 217 || is == 193 || is == 209) {
+		/*if (is == 217 || is == 193 || is == 209) {
 			if (os == 64533 && pc < 10) {
 				printf("Enter Input: ");
 			}
+		}*/
+		if (t == 0) {
+			printf("Enter All Input for Program: \n");
+			t = 1;
 		}
 
 		//execute instruction fetched
@@ -123,7 +128,7 @@ int main() {
 
 		//this represents STOP()
 		if (is == 0) {
-			return 0;
+			//return 0;
 			//cant do mem dump if it actually stops. remember to uncomment.
 		}
 		//STBA i = 1111 0000 = F0 = 240 | STBA d = 1111 0001 = F1 = 241| STBX i = 1111 1000 = F8 = 248 | STBX d = 1111 1001 = F9 = 249
@@ -189,7 +194,6 @@ int main() {
 		}
 		//DECI 0011 0aaa all but i
 		else if (is >= 49 && is <= 55) {
-			printf("Enter Input: ");
 			DECI();
 		}
 		//STRO 0100 1aaa d,n,s,sf,x

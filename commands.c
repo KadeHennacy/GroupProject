@@ -148,9 +148,7 @@ void LDBr() {
 	if (is == 217) {
 		//fc15 is input device
 		if (os == 64533) {
-			printf("Enter Input: ");
 			if (scanf("%d", &x) > 0) {
-				printf("You entered %d\n", x);
 				//ensure user doesn't enter more than a byte
 				x = x % 256;
 			}
@@ -257,10 +255,8 @@ void LDWr() {
 	//LDWA d = 1100 0001 = 193
 	if (is == 193) {
 		if (os == 64533) {
-			printf("Enter Input: ");
 			//store as character
 			if (scanf("%c", &a) > 0) {
-				printf("You entered %c\n", a);
 			}
 			else printf("You didn't enter anything.\n");
 		}
@@ -332,9 +328,7 @@ void LDWr() {
 	if (is == 217) {
 		//fc15 is input device
 		if (os == 64533) {
-			printf("Enter Input: ");
 			if (scanf("%d", &x) > 0) {
-				printf("You entered %d\n", x);
 				//ensure user doesn't enter more than a byte
 				x = x % 256;
 			}
@@ -715,7 +709,6 @@ void DECI() {
 	//DECI d = 49, tested, works
 	if (is == 49) {
 		if (scanf("%d", &mem[os]) > 0) {
-			printf("You entered %d\n", mem[os]);
 			if (mem[os] < 0) {
 				n = 1;
 				v = z = c = 0;
@@ -741,7 +734,6 @@ void DECI() {
 	if (is == 51) {
 		if (os > 32767) {
 			if (scanf("%d", &mem[sp + os - 65546]) > 0) {
-				printf("You entered %d\n", mem[sp + os - 65546]);
 				if (mem[sp + os - 65546] < 0) {
 					n = 1;
 				}
@@ -757,7 +749,6 @@ void DECI() {
 			}
 		}
 		else if (scanf("%d", &mem[sp + os]) > 0) {
-			printf("You entered %d\n", mem[sp + os]);
 			if (mem[sp + os] < 0) {
 				n = 1;
 			}
@@ -776,7 +767,6 @@ void DECI() {
 	//DECI sf = 52
 	if (is == 52) {
 		if (scanf("%d", &x) > 0) {
-			printf("You entered %d\n", x);
 			//ensure user doesn't enter more than a byte
 			x = x % 256;
 		}
@@ -957,8 +947,8 @@ void BRGE() {
 void BRGT() {
 	//0001 1110
 	if (is == 30) {
-		if (a >= 0) {
-			pc = os;
+		if (z == 0 && n==0) {
+			pc = os - 1;
 		}
 	}
 	//0001 1111 stack relative
@@ -1013,7 +1003,7 @@ void CPWr() {
 			n = 1;
 		}
 	}
-	//CPWA d = 161
+	//CPWA d = 161 tested, works
 	int word = mem[os] * 256 + mem[os + 1];
 	if (is == 161) {
 		if (a - word > 0) {
@@ -1031,8 +1021,29 @@ void CPWr() {
 			n = 1;
 		}
 	}
-
-
+	//CPWA s = 163
+	if (is == 163) {
+		if (os > 32767) {
+			word = mem[os - 65536 + sp] * 256 + mem[os - 65535 + sp];
+		}
+		else {
+			word = mem[os + sp] * 256 + mem[os + sp + 1];
+		}
+		if (a - word > 0) {
+			c = 1;
+		}
+		if (a - word < 0) {
+			n = 1;
+		}
+		if (a - word == 0) {
+			z = 1;
+			c = 1;
+		}
+		if (a == 32768 && word == 32768) {
+			v = 1;
+			n = 1;
+		}
+	}
 
 
 	//kirias
@@ -1298,6 +1309,7 @@ void CALL() {
 	if (is == 36) { //immediate
 		sp -= 2;
 		//must subtract 2 b/c the loop increments pc before the it actually executes intructions
+		///TRY SP + 1 
 		mem[sp] = pc;
 		pc = os - 1;
 	}
