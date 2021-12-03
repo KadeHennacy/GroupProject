@@ -1297,13 +1297,14 @@ void CALL() {
 	//0010 0100
 	if (is == 36) { //immediate
 		sp -= 2;
+		//must subtract 2 b/c the loop increments pc before the it actually executes intructions
 		mem[sp] = pc;
-		pc = os;
+		pc = os - 1;
 	}
 	//0010 0101
 	else { //is == 37, indexed
 		sp -= 2;
-		mem[sp] = pc;
+		mem[sp] = pc - 1;
 		pc = mem[os + x];
 	}
 }

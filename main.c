@@ -255,12 +255,10 @@ int main() {
 		//0010 0101
 		else if (is == 36 || is == 37) {
 			CALL();
-			return 0;
 		}
 		//0000 0001
 		else if (is = 1) {
 			RET();
-			return 0;
 		}
 
 		//######Part 8######//
