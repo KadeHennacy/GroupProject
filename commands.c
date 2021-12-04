@@ -236,6 +236,12 @@ void DECO() {
 		else printf("%d", mem[os + x] * 256 + mem[os + x + 1]);
 	}
 	//DECO sx = 0011 1110 = 3E = 62
+	if (is == 62) {
+		if (os + x > 32767) {
+			printf("%d", mem[os + x - 65536 + sp] * 256 + mem[os + x - 65536 + sp + 1]);
+		}
+		else printf("%d", mem[os + x + sp] * 256 + mem[os + x + sp + 1]);
+	}
 	//DECO sfx = 0011 1111 = 3F = 63 
 
 }
@@ -320,6 +326,15 @@ void LDWr() {
 			else printf("You didn't enter anything.\n");
 		}
 		else x = mem[os] * 256 + mem[os + 1];
+	}
+	//ldwx s
+	if (is == 203) {
+		if (os > 32767) {
+			x = mem[os - 65536 + sp] * 256 + mem[os - 65535 + sp];
+		}
+		else {
+			x = mem[os + sp] * 256 + mem[os + sp + 1];
+		}
 	}
 
 	//from ldbr, just to look at
@@ -465,7 +480,14 @@ void STWr() {
 	}
 	//STWX s
 	if (is == 235) {
-		mem[sp + os] = x;
+		if (os > 32767) {
+			mem[sp + os - 65536] = x / 256;
+			mem[sp + os - 65535] = x % 256;
+		}
+		else {
+			mem[sp + os] = x / 256;
+			mem[sp + os + 1] = x % 256;
+		}
 	}
 	//STWX sf
 	if (is == 236) {
@@ -845,6 +867,39 @@ void DECI() {
 			mem[x + os] /= 256;
 		}
 		else printf("You didn't enter anything.\n");
+	}
+	//DECI sx
+	if (is == 54){
+		if (os > 32767) {
+			if (scanf("%d", &mem[x + sp + os - 65546]) > 0) {
+				if (mem[x + sp + os - 65546] < 0) {
+					n = 1;
+				}
+				else if (mem[x + sp + os - 65546] == 0) {
+					z = 1;
+				}
+				else if (mem[x + sp + os - 65546] <= -32768 || mem[x + sp + os - 65546] >= 32767) {
+					v = 1;
+				}
+				//convert to word
+				mem[x + sp + os - 65545] = mem[x + sp + os - 65546] % 256;
+				mem[x + sp  + os - 65546] /= 256;
+			}
+		}
+		else if (scanf("%d", &mem[x + sp + os]) > 0) {
+			if (mem[x + sp  + os] < 0) {
+				n = 1;
+			}
+			else if (mem[x + sp + os] == 0) {
+				z = 1;
+			}
+			else if (mem[x + sp + os] <= -32768 || mem[x + sp  + os] >= 32767) {
+				v = 1;
+			}
+			//convert to word
+			mem[x + sp + os + 1] = mem[x + sp  + os] % 256;
+			mem[x + sp + os] /= 256;
+		}
 	}
 
 
