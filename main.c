@@ -126,7 +126,7 @@ int main() {
 
 		//this represents STOP(). Comment out the return if you want it to memdump after the program is done
 		if (is == 0) {
-			return 0;
+			//return 0;
 		}
 		//STBA i = 1111 0000 = F0 = 240 | STBA d = 1111 0001 = F1 = 241| STBX i = 1111 1000 = F8 = 248 | STBX d = 1111 1001 = F9 = 249
 		//1111 raaa
@@ -258,14 +258,14 @@ int main() {
 			CALL();
 		}
 		//0000 0001
-		else if (is = 1) {
+		else if (is == 1) {
 			RET();
 		}
 
 		//######Part 8######//
 
 		//0000 0011
-		else if (is = 3) {
+		else if (is == 3) {
 			MOVSPA();
 		}
 		else{
