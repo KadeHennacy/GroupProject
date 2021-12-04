@@ -243,6 +243,14 @@ void DECO() {
 		else printf("%d", mem[os + x + sp] * 256 + mem[os + x + sp + 1]);
 	}
 	//DECO sfx = 0011 1111 = 3F = 63 
+	if (is == 63) {
+		if (os > 32767) {
+			printf("%d", mem[mem[sp + os - 65546] * 256 + mem[sp + os - 65545] + x] * 256 + mem[mem[sp + os - 65546] * 256 + mem[sp + os - 65545 + x + 1]]);
+		}
+		else {
+			printf("%d", mem[mem[sp + os] * 256 + mem[sp + os + 1] + x] * 256 + mem[mem[sp + os] * 256 + mem[sp + os + 1] + x + 1]);
+		}
+	}
 
 }
 //######Part 4######//
@@ -828,11 +836,19 @@ void DECI() {
 	}
 	//DECI sf = 52
 	if (is == 52) {
-		if (scanf("%d", &x) > 0) {
-			//ensure user doesn't enter more than a byte
-			x = x % 256;
+		if (os > 32767) {
+			if (scanf("%d", &mem[mem[sp + os - 65536] * 256 + mem[sp + os - 65535]]) > 0) {
+				mem[mem[sp + os - 65536] * 256 + mem[sp + os - 65535] + 1] = mem[mem[sp + os - 65536] * 256 + mem[sp + os - 65535]] % 256;
+				mem[mem[sp + os - 65536] * 256 + mem[sp + os - 65535]] /= 256;
+			}
+			else printf("You didn't enter anything.\n");
 		}
-		else printf("You didn't enter anything.\n");
+		else {
+			if (scanf("%d", &mem[mem[sp + os] * 256 + mem[sp + os +1]]) > 0) {
+				mem[mem[sp + os] * 256 + mem[sp + os + 1] + 1] = mem[mem[sp + os] * 256 + mem[sp + os + 1]] % 256;
+				mem[mem[sp + os] * 256 + mem[sp + os + 1]] /= 256;
+			}
+		}
 	}
 	//DECI x = 53
 	if (is == 53) {
@@ -899,6 +915,21 @@ void DECI() {
 			//convert to word
 			mem[x + sp + os + 1] = mem[x + sp  + os] % 256;
 			mem[x + sp + os] /= 256;
+		}
+	}
+	//deci sfx
+	if (is == 55) {
+		if (os > 32767) {
+			if (scanf("%d", &mem[mem[sp + os - 65546] * 256 + mem[sp + os - 65545] + x]) > 0) {
+				//convert to word
+				mem[mem[sp + os - 65546] * 256 + mem[sp + os - 65545 + x + 1]] = mem[mem[sp + os - 65546] * 256 + mem[sp + os - 65545] + x] % 256;
+				mem[mem[sp + os - 65546] * 256 + mem[sp + os - 65545]+ x] /= 256;
+			}
+		}
+		else if (scanf("%d", &mem[mem[sp + os] + x]) > 0) {
+			//convert to word
+			mem[mem[sp + os] * 256 + mem[sp + os + 1] + x + 1] = mem[mem[sp + os] + x] % 256;
+			mem[mem[sp + os] * 256 + mem[sp + os + 1] + x] /= 256;
 		}
 	}
 
@@ -1350,31 +1381,51 @@ void CPWr() {
 	//	//n bit = n ^ v
 	//}
 	////CPWX s
-	//else if (is == 171) {
-	//	T = x - mem[sp + os];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-	////CPWX sf
-	//else if (is == 172) {
-	//	T = x - mem[mem[sp + os]];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
+	else if (is == 171) {
+		if (os > 32767) {
+			word = mem[os - 65536 + sp] * 256 + mem[os - 65535 + sp];
+		}
+		else {
+			word = mem[os + sp] * 256 + mem[os + sp + 1];
+		}
+		if (x - word > 0) {
+			c = 1;
+		}
+		if (x - word < 0) {
+			n = 1;
+		}
+		if (x - word == 0) {
+			z = 1;
+			c = 1;
+		}
+		if (x == 32768 && word == 32768) {
+			v = 1;
+			n = 1;
+		}
+	}
+	//CPWX sf
+	if (is == 172) {
+		if (os > 32767) {
+			word = mem[mem[os + sp - 65536] * 256 + mem[os + sp - 65535]] * 256 + mem[mem[os + sp - 65536] * 256 + mem[os + sp - 65535] + 1];
+		}
+		else {
+			word = mem[mem[os + sp] * 256 + mem[os + sp + 1]] * 256 + mem[mem[os + sp] * 256 + mem[os + sp + 1] + 1];
+		}
+		if (x - word > 0) {
+			c = 1;
+		}
+		if (x - word < 0) {
+			n = 1;
+		}
+		if (x - word == 0) {
+			z = 1;
+			c = 1;
+		}
+		if (x == 32768 && word == 32768) {
+			v = 1;
+			n = 1;
+		}
+	}
 	////CPWX x
 	//else if (is == 173) {
 	//	T = x - mem[os + x];
@@ -1483,6 +1534,6 @@ void RET() {
 	sp += 2;
 }
 //######Part 8######//
-void MOVSPA() {
+void MOVSPA(){
 	a = sp;
 }
