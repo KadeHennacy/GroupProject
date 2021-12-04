@@ -229,6 +229,12 @@ void DECO() {
 		//if()test
 	}
 	//DECO x = 0011 1101 = 3D = 61
+	if (is == 61) {
+		if (os > 32767) {
+			printf("%d", mem[os - 65536 + x] * 256 + mem[os - 65536 + x + 1]);
+		}
+		else printf("%d", mem[os + x] * 256 + mem[os + x + 1]);
+	}
 	//DECO sx = 0011 1110 = 3E = 62
 	//DECO sfx = 0011 1111 = 3F = 63 
 
@@ -301,7 +307,20 @@ void LDWr() {
 			a = mem[mem[os + sp] * 256 + mem[os + sp + 1]] * 256 + mem[mem[os + sp] * 256 + mem[os + sp + 1] + 1];
 		}
 	}
-
+	//ldwx i
+	if (is == 200) {
+		x = os;
+	}
+	//ldwx d 
+	if (is == 201) {
+		if (os == 64533) {
+			//store as character
+			if (scanf("%c", &x) > 0) {
+			}
+			else printf("You didn't enter anything.\n");
+		}
+		else x = mem[os] * 256 + mem[os + 1];
+	}
 
 	//from ldbr, just to look at
 	//LDBA n = 1101 0010 = D2 = 210
@@ -432,10 +451,12 @@ void STWr() {
 
 	//STWX d
 	if (is == 233) {
-		if (os == 64534) {
-			printf("%c", x);
+		if (os == 64534) printf("%c", x);
+		//+1 fixes off by 1 error
+		else {
+			mem[os] = x / 256;
+			mem[os + 1] = x % 256;
 		}
-		else mem[os] = x;
 	}
 
 	//STWX n
@@ -701,7 +722,7 @@ void SUBr() {
 }
 void ASLr() {
 	//0000 1010
-	if (is = 10) {
+	if (is == 10) {
 		//perform an Arithmatic Shift Left on the value in the Accumulator
 		a = a * 2;
 	}
@@ -791,7 +812,40 @@ void DECI() {
 		}
 		else printf("You didn't enter anything.\n");
 	}
-
+	//DECI x = 53
+	if (is == 53) {
+		if (os > 32767) {
+			if (scanf("%d", &mem[x + os - 65546]) > 0) {
+				if (mem[x + os - 65546] < 0) {
+					n = 1;
+				}
+				else if (mem[x + os - 65546] == 0) {
+					z = 1;
+				}
+				else if (mem[x + os - 65546] <= -32768 || mem[x + os - 65546] >= 32767) {
+					v = 1;
+				}
+				//convert to word
+				mem[x + os - 65545] = mem[x + os - 65546] % 256;
+				mem[x + os - 65546] /= 256;
+			}
+		}
+		else if (scanf("%d", &mem[x + os]) > 0) {
+			if (mem[x + os] < 0) {
+				n = 1;
+			}
+			else if (mem[x + os] == 0) {
+				z = 1;
+			}
+			else if (mem[x + os] <= -32768 || mem[x + os] >= 32767) {
+				v = 1;
+			}
+			//convert to word
+			mem[x + os + 1] = mem[x + os] % 256;
+			mem[x + os] /= 256;
+		}
+		else printf("You didn't enter anything.\n");
+	}
 
 
 	//from stwr
@@ -1087,6 +1141,7 @@ void CPWr() {
 		}
 	}
 	
+	
 
 	//kirias
 	//int T;
@@ -1197,18 +1252,22 @@ void CPWr() {
 	//}
 
 	////CPWX i
-	//if (is == 168) {
-	//	T = x - os;
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
+	if (is == 168) {
+		if (x - os > 0) {
+			c = 1;
+		}
+		if (x - os < 0) {
+			n = 1;
+		}
+		if (x - os == 0) {
+			z = 1;
+			c = 1;
+		}
+		if (x == 32768 && os == 32768) {
+			v = 1;
+			n = 1;
+		}
+	}
 	////CPWX d
 	//else if (is == 169) {
 	//	T = x - mem[os];
