@@ -14,7 +14,7 @@
 #include "commands.h"
 //an array of integers that simulates Pep/9 main memory
 int mem[65536];
-//index for loader traversing mem, program counter, stack pointer, instruction specifier, operand specifier, accumulator, index register, NZVC bits, toggle to prevent multiple prompts for user input
+//index for loader traversing mem, program counter, stack pointer, instruction specifier, operand specifier, accumulator, index register, NZVC bits, toggle to prevent multiple prompts for batch user input
 int i, pc, sp, is, os, a, x, n, z, v, c, t;
 
 int main() {
@@ -112,24 +112,21 @@ int main() {
 		if (is > 17) {
 			pc += 2;
 		}
-		/*if (is == 217 || is == 193 || is == 209) {
-			if (os == 64533 && pc < 10) {
-				printf("Enter Input: ");
+		if (is == 217 || is == 193 || is == 209 || (is >= 49 && is <= 55)) {
+			if (t == 0) {
+				printf("Enter batch input if applicable: \n");
+				t = 1;
 			}
-		}*/
-		if (t == 0) {
-			printf("Enter All Input for Program: \n");
-			t = 1;
 		}
+		
 
 		//execute instruction fetched
 
 		//######part 2#######//
 
-		//this represents STOP()
+		//this represents STOP(). Comment out the return if you want it to memdump after the program is done
 		if (is == 0) {
-			//return 0;
-			//cant do mem dump if it actually stops. remember to uncomment.
+			return 0;
 		}
 		//STBA i = 1111 0000 = F0 = 240 | STBA d = 1111 0001 = F1 = 241| STBX i = 1111 1000 = F8 = 248 | STBX d = 1111 1001 = F9 = 249
 		//1111 raaa

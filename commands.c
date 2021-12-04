@@ -292,6 +292,16 @@ void LDWr() {
 			v = 1;
 		}
 	}
+	//ldwa sf tested, works
+	if (is == 196) {
+		if (os > 32767) {
+			a = mem[mem[os + sp - 65536] * 256 + mem[os + sp - 65535]] * 256 + mem[mem[os + sp - 65536] * 256 + mem[os + sp - 65535] + 1];
+		}
+		else {
+			a = mem[mem[os + sp] * 256 + mem[os + sp + 1]] * 256 + mem[mem[os + sp] * 256 + mem[os + sp + 1] + 1];
+		}
+	}
+
 
 	//from ldbr, just to look at
 	//LDBA n = 1101 0010 = D2 = 210
@@ -310,7 +320,7 @@ void LDWr() {
 	if (is == 213) {
 		a = mem[os + x] % 256;
 	}
-	//LDBA sx = 1101 0110 = D6 = 214
+	//LDBA sf = 1101 0110 = D6 = 214
 	if (is == 214) {
 		a = mem[sp + os + x] % 256;
 	}
@@ -395,10 +405,18 @@ void STWr() {
 			mem[sp + os + 1] = a % 256;
 		}
 	}
-	//STWA sf
+	//STWA sf tested, works
 	if (is == 228) {
-		mem[mem[sp + os]] = a;
+		if (os > 32767) {
+			mem[mem[sp + os - 65536] * 256 + mem[sp + os - 65535]] = a / 256;
+			mem[mem[sp + os - 65536] * 256 + mem[sp + os - 65535] + 1] = a % 256;
+		}
+		else {
+			mem[mem[sp + os] * 256 + mem[sp + os + 1]] = a / 256;
+			mem[mem[sp + os] * 256 + mem[sp + os + 1] + 1] = a % 256;
+		}
 	}
+
 	//STWA x
 	if (is == 229) {
 		mem[os + x] = a;
@@ -448,6 +466,7 @@ void STWr() {
 void SUBSP() {
 	//0101 1aaa all
 	if (is == 88) {
+		//try +- 1
 		sp = sp - os;
 	}
 	//SUBSP d = 0101 1001 = 89
@@ -858,8 +877,8 @@ void STRO() {
 void BRLE() {
 	//0001 0100
 	if (is == 20) { //immediate addressing
-		if ( a > 0) {
-			pc = os;
+		if ( n == 1 || z == 1) {
+			pc = os - 1;
 		}
 	}
 	//0001 0101
@@ -1044,7 +1063,30 @@ void CPWr() {
 			n = 1;
 		}
 	}
-
+	//CPWA sf = 164
+	if (is == 164) {
+		if (os > 32767) {
+			word = mem[mem[os + sp - 65536] * 256 + mem[os + sp - 65535]] * 256 + mem[mem[os + sp - 65536] * 256 + mem[os + sp - 65535] + 1];
+		}
+		else {
+			word = mem[mem[os + sp] * 256 + mem[os + sp + 1]] * 256 + mem[mem[os + sp] * 256 + mem[os + sp + 1] + 1];
+		}
+		if (a - word > 0) {
+			c = 1;
+		}
+		if (a - word < 0) {
+			n = 1;
+		}
+		if (a - word == 0) {
+			z = 1;
+			c = 1;
+		}
+		if (a == 32768 && word == 32768) {
+			v = 1;
+			n = 1;
+		}
+	}
+	
 
 	//kirias
 	//int T;
@@ -1310,7 +1352,8 @@ void CALL() {
 		sp -= 2;
 		//must subtract 2 b/c the loop increments pc before the it actually executes intructions
 		///TRY SP + 1 
-		mem[sp] = pc;
+		mem[sp] = pc / 256;
+		mem[sp + 1] = pc % 256;
 		pc = os - 1;
 	}
 	//0010 0101
@@ -1322,7 +1365,7 @@ void CALL() {
 }
 void RET() {
 	//0000 0001
-	pc = mem[sp];
+	pc = mem[sp] * 256 + mem[sp + 1];
 	sp += 2;
 }
 //######Part 8######//
