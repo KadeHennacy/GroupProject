@@ -321,6 +321,15 @@ void LDWr() {
 			a = mem[mem[os + sp] * 256 + mem[os + sp + 1]] * 256 + mem[mem[os + sp] * 256 + mem[os + sp + 1] + 1];
 		}
 	}
+	//ldwa sfx
+	if (is == 199) {
+		if (os > 32767) {
+			a = mem[mem[sp + os - 65546] * 256 + mem[sp + os - 65545] + x] * 256 + mem[mem[sp + os - 65546] * 256 + mem[sp + os - 65545 + x + 1]];
+		}
+		else {
+			 a = mem[mem[sp + os] * 256 + mem[sp + os + 1] + x] * 256 + mem[mem[sp + os] * 256 + mem[sp + os + 1] + x + 1];
+		}
+	}
 	//ldwx i
 	if (is == 200) {
 		x = os;
@@ -469,7 +478,14 @@ void STWr() {
 	}
 	//STWA sfx
 	if (is == 231) {
-		mem[mem[sp + os] + x] = a;
+		if (os > 32767) {
+			mem[mem[sp + os - 65546] * 256 + mem[sp + os - 65545 + x + 1]] = a %256;
+			mem[mem[sp + os - 65546] * 256 + mem[sp + os - 65545] + x] = a / 256;
+		}
+		else{
+			mem[mem[sp + os] * 256 + mem[sp + os + 1] + x + 1] = a % 256;
+			mem[mem[sp + os] * 256 + mem[sp + os + 1] + x] = a / 256;
+		}
 	}
 
 	//STWX d
@@ -1147,19 +1163,37 @@ void CPWr() {
 	//CPWA i = 160
 	//testing, works
 	if (is == 160) {
-		if (a - os > 0) {
-			c = 1;
+		if (os > 32767) {
+			if (a - (os - 65536) > 0) {
+				c = 1;
+			}
+			if (a - (os - 65536) < 0) {
+				n = 1;
+			}
+			if (a - (os - 65536) == 0) {
+				z = 1;
+				c = 1;
+			}
+			if (a == 32768 && os == 32768) {
+				v = 1;
+				n = 1;
+			}
 		}
-		if (a - os < 0) {
-			n = 1;
-		}
-		if (a - os == 0) {
-			z = 1;
-			c = 1;
-		}
-		if (a == 32768 && os == 32768) {
-			v = 1;
-			n = 1;
+		else {
+			if (a - os > 0) {
+				c = 1;
+			}
+			if (a - os < 0) {
+				n = 1;
+			}
+			if (a - os == 0) {
+				z = 1;
+				c = 1;
+			}
+			if (a == 32768 && os == 32768) {
+				v = 1;
+				n = 1;
+			}
 		}
 	}
 	//CPWA d = 161 tested, works
