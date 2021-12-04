@@ -261,7 +261,7 @@ void BR() {
 	}
 	//BR x = 0001 0011 = 13 = 19 tested, works
 	if (is == 19) {
-		pc = mem[os + 1] -1 + x;
+		pc = mem[os + x] * 256 + mem[os + x + 1] - 1;
 	}
 }
 void LDWr() {
