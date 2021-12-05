@@ -27,7 +27,7 @@ void STBr() {
 	}
 	//STBA n = 1111 0010 = F2 = 242
 	if (is == 242) {
-		mem[mem[os]] = a % 256;  //256 since could be a word
+		mem[mem[os]] = a % 256;  //%256 since it could be a word
 	}
 	//STBA s = 1111 0011 = F3 = 243
 	if (is == 243) {
@@ -97,20 +97,12 @@ void LDBr() {
 	if (is == 209) {
 		//fc15 is input device
 		if (os == 64533) {
-
-
-			//original input style, commented out for debugging
-			//printf("Enter Input: ");
 			//store as character
 			if (scanf("%c", &a) > 0) {
-				//printf("You entered %c\n", a);
 				//ensure user doen't enter more than a byte
 				a = a % 256;
 			}
 			else printf("You didn't enter anything.\n");
-
-
-
 		}
 		else a = mem[os] % 256;
 	}
@@ -138,12 +130,10 @@ void LDBr() {
 	if (is == 215) {
 		a = mem[mem[sp + os] + x];
 	}
-	
 	//LDBX i = 1101 1000 = D8 = 216
 	if (is == 216) {
 		x = os % 256;
 	}
-
 	//LDBX d = 1101 1001 = D9 = 217
 	if (is == 217) {
 		//fc15 is input device
@@ -210,7 +200,6 @@ void DECO() {
 	}
 	//DECO n = 0011 1010 = 3A = 58
 	if (is == 58) {
-		//word = mem[mem[os - 1] * 256 + mem[os] - 1] * 256 + mem[mem[os - 1] * 256 + mem[os]]; doesn't work for most cases.
 		word = mem[mem[os] * 256 + mem[os + 1]] * 256 + mem[mem[os] * 256 + mem[os + 1] + 1];
 		if (word > 32767) {
 			printf("%d", -65536 + word);
@@ -226,7 +215,6 @@ void DECO() {
 	}
 	//DECO sf = 0011 1100 = 3C = 60
 	if (is == 60) {
-		//if()test
 	}
 	//DECO x = 0011 1101 = 3D = 61
 	if (is == 61) {
@@ -255,20 +243,18 @@ void DECO() {
 }
 //######Part 4######//
 void BR() {
-	//BR i = 0001 0010 = 12 = 18 tested, works
+	//BR i = 0001 0010 = 12 = 18
 	if (is == 18) {
 		pc = os - 1;
 	}
-	//BR x = 0001 0011 = 13 = 19 tested, works
+	//BR x = 0001 0011 = 13 = 19 
 	if (is == 19) {
 		pc = mem[os + x] * 256 + mem[os + x + 1] - 1;
 	}
 }
 void LDWr() {
 	//1100 raaa all
-	//at part 4 we need i, d, s
-	//int word = mem[os] * 256 + mem[os + 1];
-	//LDWA i = 1100 0000 = 192 tested, works
+	//LDWA i = 1100 0000 = 192
 	if (is == 192) {
 		a = os;
 	}
@@ -282,11 +268,11 @@ void LDWr() {
 		}
 		else a = mem[os] * 256 + mem[os + 1];
 	}
-	//LDWA n tested, works
+	//LDWA n
 	if (is == 194) {
 		a = mem[mem[os] * 256 + mem[os + 1]] * 256 + mem[mem[os] * 256 + mem[os + 1] + 1];
 	}
-	//LDWA s tested, works
+	//LDWA s
 	if (is == 195) {
 		if (os > 32767) {
 			a = mem[os - 65536 + sp] * 256 + mem[os - 65535 + sp];
@@ -294,7 +280,7 @@ void LDWr() {
 		else {
 			a = mem[os + sp] * 256 + mem[os + sp + 1];
 		}
-		//handle status bits, copied from addr()
+		//handle status bits
 		if (a > 65535) {
 			c = 1;
 			a -= 65536;
@@ -312,7 +298,7 @@ void LDWr() {
 			v = 1;
 		}
 	}
-	//ldwa sf tested, works
+	//ldwa sf
 	if (is == 196) {
 		if (os > 32767) {
 			a = mem[mem[os + sp - 65536] * 256 + mem[os + sp - 65535]] * 256 + mem[mem[os + sp - 65536] * 256 + mem[os + sp - 65535] + 1];
@@ -353,86 +339,11 @@ void LDWr() {
 			x = mem[os + sp] * 256 + mem[os + sp + 1];
 		}
 	}
-
-	//from ldbr, just to look at
-	//LDBA n = 1101 0010 = D2 = 210
-	if (is == 210) {
-		a = mem[mem[os]] % 256;
-	}
-	//LDBA s = 1101 0011 = D3 = 211
-	if (is == 211) {
-		a = mem[sp + os] % 256;
-	}
-	//LDBA sf = 1101 0100 = D4 = 212
-	if (is == 212) {
-		a = mem[mem[sp + os]] % 256;
-	}
-	//LDBA x = 1101 0101 = D5 = 213
-	if (is == 213) {
-		a = mem[os + x] % 256;
-	}
-	//LDBA sf = 1101 0110 = D6 = 214
-	if (is == 214) {
-		a = mem[sp + os + x] % 256;
-	}
-	//LDBA sfx = 1101 0111 = D7 = 215
-	if (is == 215) {
-		a = mem[mem[sp + os] + x];
-	}
-
-	//LDBX i = 1101 1000 = D8 = 216
-	if (is == 216) {
-		x = os % 256;
-	}
-
-	//LDBX d = 1101 1001 = D9 = 217
-	if (is == 217) {
-		//fc15 is input device
-		if (os == 64533) {
-			if (scanf("%d", &x) > 0) {
-				//ensure user doesn't enter more than a byte
-				x = x % 256;
-			}
-			else printf("You didn't enter anything.\n");
-		}
-		else x = mem[os] % 256;
-	}
-
-	//LDBX n = 1101 1010 = DA = 218
-	if (is == 218) {
-		x = mem[mem[os]] % 256;
-	}
-
-	//LDBX s = 1101 1011 = DB = 219
-	if (is == 219) {
-		x = mem[sp + os] % 256;
-	}
-
-	//LDBX sf = 1101 1100 = DC = 220
-	if (is == 220) {
-		x = mem[mem[sp + os]] % 256;
-	}
-
-	//LDBX x = 1101 1101 = DD = 221
-	if (is == 221) {
-		x = mem[os + x] % 256;
-	}
-
-	//LDBX sx = 1101 1110 = DE = 222
-	if (is == 222) {
-		x = mem[sp + os + x] % 256;
-	}
-	//LDBX sfx = 1101 1111 = DF = 223 
-	if (is == 223) {
-		x = mem[mem[sp + os] + x] % 256;
-	}
 }
 void STWr() {
 	//1110 raaa all but i
-	//same as stbr without the mod. Haven't tested cuz it should work since STBr works.
-	//STWA d tested, works
+	//STWA d
 	if (is == 225) {
-		//stba will output the value of the byte in the word, stwa outputs the first byte. So divide it by 256.
 		if (os == 64534) printf("%c", a);
 		//+1 fixes off by 1 error
 		else {
@@ -440,12 +351,12 @@ void STWr() {
 			mem[os + 1] = a % 256;
 		}
 	}
-	//STWA n tested, works
+	//STWA n
 	if (is == 226) {
 		mem[mem[os] * 256 + mem[os + 1]] = a / 256;
 		mem[mem[os] * 256 + mem[os + 1] + 1] = a % 256;
 	}
-	//STWA s tested, works
+	//STWA s
 	if (is == 227) {
 		if (os > 32767) {
 			mem[sp + os - 65536] = a / 256;
@@ -456,7 +367,7 @@ void STWr() {
 			mem[sp + os + 1] = a % 256;
 		}
 	}
-	//STWA sf tested, works
+	//STWA sf
 	if (is == 228) {
 		if (os > 32767) {
 			mem[mem[sp + os - 65536] * 256 + mem[sp + os - 65535]] = a / 256;
@@ -467,7 +378,6 @@ void STWr() {
 			mem[mem[sp + os] * 256 + mem[sp + os + 1] + 1] = a % 256;
 		}
 	}
-
 	//STWA x
 	if (is == 229) {
 		mem[os + x] = a;
@@ -487,7 +397,6 @@ void STWr() {
 			mem[mem[sp + os] * 256 + mem[sp + os + 1] + x] = a / 256;
 		}
 	}
-
 	//STWX d
 	if (is == 233) {
 		if (os == 64534) printf("%c", x);
@@ -533,7 +442,6 @@ void STWr() {
 void SUBSP() {
 	//0101 1aaa all
 	if (is == 88) {
-		//try +- 1
 		sp = sp - os;
 	}
 	//SUBSP d = 0101 1001 = 89
@@ -602,7 +510,7 @@ void ADDSP() {
 //######Part 5######//
 void ADDr() {
 	//0110 raaa all
-	//ADDA immediate tesed, works
+	//ADDA immediate
 	if (is == 96) {
 		a += os;
 		if (a > 65535) {
@@ -625,23 +533,19 @@ void ADDr() {
 	}
 	//ADDA direct
 	else if (is == 97) {
-		//the +1 fixes the off by 1 that prevents it from outputting the same as PEP9. IDK if this fix will work for all cases yet.
 		a += mem[os + 1];
 	}
 	//ADDA indirect
 	else if (is == 98) {
-		//this is the same exact code from DECO N. It appears to work.
 		a += mem[mem[os] * 256 + mem[os + 1]] * 256 + mem[mem[os] * 256 + mem[os + 1] + 1];
 	}
 	//ADDA s
 	else if (is == 99) {
-		//tested, works
 		if (os > 32767) {
 			a += mem[os - 65536 + sp] * 256 + mem[os - 65536 + sp + 1];
 		}
 		else a += mem[os + sp] * 256 + mem[os + sp + 1];
 	}
-	//////havent tested the rest///////
 	//ADDA sf
 	else if (is == 100) {
 		a += mem[mem[sp + os]];
@@ -713,9 +617,6 @@ void SUBr() {
 		}
 		else a += mem[os + sp] * 256 + mem[os + sp + 1];
 	}
-
-	////these ^ should work b/c same as addr. Havent tested rest./////
-	
 	//SUBA sf
 	else if (is == 116) {
 		a -= mem[mem[sp + os]];
@@ -732,7 +633,6 @@ void SUBr() {
 	else if (is == 119) {
 		a -= mem[mem[sp + os] + x];
 	}
-
 	//SUBX immediate
 	else if (is == 120) {
 		x -= os;
@@ -792,7 +692,7 @@ void ASRr() {
 }
 void DECI() {
 	//0011 0aaa all but i
-	//DECI d = 49, tested, works
+	//DECI d = 49
 	if (is == 49) {
 		if (scanf("%d", &mem[os]) > 0) {
 			if (mem[os] < 0) {
@@ -948,84 +848,13 @@ void DECI() {
 			mem[mem[sp + os] * 256 + mem[sp + os + 1] + x] /= 256;
 		}
 	}
-
-
-	//from stwr
-	//direct
-	if (is == 225) {
-		//stba will output the value of the byte in the word, stwa outputs the first byte. So divide it by 256.
-		if (os == 64534) printf("%c", a);
-		//+1 fixes off by 1 error
-		else {
-			mem[os] = a / 256;
-			mem[os + 1] = a % 256;
-		}
-	}
-	//STWA n tested, works
-	if (is == 226) {
-		mem[mem[os] * 256 + mem[os + 1]] = a / 256;
-		mem[mem[os] * 256 + mem[os + 1] + 1] = a % 256;
-	}
-	//STWA s tested, works
-	if (is == 227) {
-		if (os > 32767) {
-			mem[sp + os - 65536] = a / 256;
-			mem[sp + os - 65535] = a % 256;
-		}
-		else {
-			mem[sp + os] = a / 256;
-			mem[sp + os + 1] = a % 256;
-		}
-	}
-
-
-	//from deco, just to look at
-	int word = mem[os] * 256 + mem[os + 1];
-	//DECO i = 0011 1000 = 38 = 56
-	if (is == 56) {
-		//if OS is negative
-		if (os > 32767) {
-			printf("%d", -65536 + os);
-		}
-		else printf("%d", os);
-	}
-	//DECO d = 0011 1001 = 39 = 57
-	if (is == 57) {
-		//if mem[os] is negative
-		if (word > 32767) {
-			printf("%d", -65536 + word);
-		}
-		else printf("%d", word);
-	}
-	//DECO n = 0011 1010 = 3A = 58
-	if (is == 58) {
-		//word = mem[mem[os - 1] * 256 + mem[os] - 1] * 256 + mem[mem[os - 1] * 256 + mem[os]]; doesn't work for most cases.
-		word = mem[mem[os] * 256 + mem[os + 1]] * 256 + mem[mem[os] * 256 + mem[os + 1] + 1];
-		if (word > 32767) {
-			printf("%d", -65536 + word);
-		}
-		else printf("%d", word);
-	}
-	//DECO s = 0011 1011 = 3B = 59
-	if (is == 59) {
-		if (os > 32767) {
-			printf("%d", mem[os - 65536 + sp] * 256 + mem[os - 65536 + sp + 1]);
-		}
-		else printf("%d", mem[os + sp] * 256 + mem[os + sp + 1]);
-	}
-	//DECO sf = 0011 1100 = 3C = 60
-	if (is == 60) {
-		//if()test
-	}
 }
 void STRO() {
 	//0100 1aaa d,n,s,sf,x
-	//stro d tested, works
+	//stro d 
 	if (is == 73) {
 		for(int k = os; mem[k] != 0; k++){
 			printf("%c", mem[k]);
-			//subtracting i wont be neccesary once I enable the stop function, but this will stop it trying to read characters as instructions after it should have stopped.
-			//i--;
 		}
 	}
 }
@@ -1051,18 +880,6 @@ void BRLT() {
 			pc = os - 1;
 		}
 	}
-	// kyrias
-	//if (is == 22) { //immedate 
-	//	if ( a >= 0){
-	//		pc = os;
-	//	}
-	//}
-	////0001 0111
-	//else { // is == 23, indexed
-	//	if( a >= 0){ 
-	//		pc = mem[os + x];
-	//	}
-	//}
 }
 void BREQ() {
 	//0001 1000
@@ -1071,19 +888,6 @@ void BREQ() {
 			pc = os - 1;
 		}
 	}
-
-	//kyrias
-	//if (is == 24) { //immediate
-	//	if (a != 0) {
-	//		pc = os;
-	//	}
-	//}
-	////0001 1001
-	//else { //is == 25, indexed
-	//	if (a != 0) {
-	//		pc = mem[os + x];
-	//	}
-	//}
 }
 void BRNE() {
 	//0001 1010
@@ -1092,18 +896,6 @@ void BRNE() {
 			pc = os - 1;
 		}
 	}
-	//kyrias
-	//if (is == 26) { //immediate
-	//	if (a == 0) {
-	//		pc = os;
-	//	}
-	//}
-	////0001 1011
-	//else { //is == 27, indexed
-	//	if (a == 0) {
-	//		pc = mem[os + x];
-	//	}
-	//}
 }
 void BRGE() {
 	//0001 1100 tested, works
@@ -1161,7 +953,6 @@ void CPWr() {
 	n = z = v = c = 0;
 	//1010 raaa all
 	//CPWA i = 160
-	//testing, works
 	if (is == 160) {
 		if (os > 32767) {
 			if (a - (os - 65536) > 0) {
@@ -1196,7 +987,7 @@ void CPWr() {
 			}
 		}
 	}
-	//CPWA d = 161 tested, works
+	//CPWA d = 161
 	int word = mem[os] * 256 + mem[os + 1];
 	if (is == 161) {
 		if (a - word > 0) {
@@ -1260,118 +1051,7 @@ void CPWr() {
 			n = 1;
 		}
 	}
-	
-	
-
-	//kirias
-	//int T;
-	////1010 raaa all
-	////CPWA i
-	//if (is == 160) {
-	//	T = a - os;
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-	////CPWA d
-	//else if (is == 161) {
-	//	T = a - mem[os];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-	////CPWA n
-	//else if (is == 162) {
-	//	T = a - mem[mem[os]];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-	////CPWA s
-	//else if (is == 163) {
-	//	T = a - mem[sp + os];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-	////CPWA sf
-	//else if (is == 164) {
-	//	T = a - mem[mem[sp + os]];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-	////CPWA x
-	//else if (is == 165){
-	//	T = a - mem[os + x];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-	////CPWA sx
-	//else if (is == 166){
-	//	T = a - mem[sp + os + x];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-	////CPWA sfx
-	//else if (is == 167){
-	//	T = a - mem[mem[sp + os] + x];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-
-	////CPWX i
+	//CPWX i
 	if (is == 168) {
 		if (x - os > 0) {
 			c = 1;
@@ -1388,33 +1068,7 @@ void CPWr() {
 			n = 1;
 		}
 	}
-	////CPWX d
-	//else if (is == 169) {
-	//	T = x - mem[os];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-	////CPWX n
-	//else if (is == 170) {
-	//	T = x - mem[mem[os]];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-	////CPWX s
+	//CPWX s
 	else if (is == 171) {
 		if (os > 32767) {
 			word = mem[os - 65536 + sp] * 256 + mem[os - 65535 + sp];
@@ -1460,50 +1114,10 @@ void CPWr() {
 			n = 1;
 		}
 	}
-	////CPWX x
-	//else if (is == 173) {
-	//	T = x - mem[os + x];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-	////CPWX sx
-	//else if (is == 174) {
-	//	T = x - mem[sp + os + x];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
-	////CPWX sfx
-	//else if (is == 175) {
-	//	T = x - mem[mem[sp + os] + x];
-	//	if (T < 0) {
-	//		//n bit = 1
-	//	}
-	//	else if (T == 0) {
-	//		//z bit = 1
-	//	}
-	//	//v bit = overflow 
-	//	//c bit = carry
-	//	//n bit = n ^ v
-	//}
 }
 void CPBr() {
-	//1011 raaa all ,  is >= 176 && is <= 191
+	//1011 raaa all
 	//cpbr i = 1011 0000
-	//same as cpwr, but %256
 	n = z = v = c = 0;
 	if (is == 176) {
 		if (a - (os % 256) > 0) {
@@ -1521,28 +1135,6 @@ void CPBr() {
 			n = 1;
 		}
 	}
-
-	//cpwr i
-	/*if (is == 160) {
-		if (a - os > 0) {
-			printf("C is set to 1\n");
-			c = 1;
-		}
-		if (a - os < 0) {
-			printf("N set to 1\n");
-			n = 1;
-		}
-		if (a - os == 0) {
-			printf("Z and C set to 1\n");
-			z = 1;
-			c = 1;
-		}
-		if (a == 32768 && os == 32768) {
-			printf("V set to 1\n");
-			v = 1;
-			n = 1;
-		}
-	}*/
 }
 //######Part 7######//
 void CALL() {
@@ -1550,7 +1142,6 @@ void CALL() {
 	if (is == 36) { //immediate
 		sp -= 2;
 		//must subtract 2 b/c the loop increments pc before the it actually executes intructions
-		///TRY SP + 1 
 		mem[sp] = pc / 256;
 		mem[sp + 1] = pc % 256;
 		pc = os - 1;

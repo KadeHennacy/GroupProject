@@ -18,7 +18,7 @@ int mem[65536];
 int i, pc, sp, is, os, a, x, n, z, v, c, t;
 
 int main() {
-	//load the machine language program from input.pepo into mem. Best practices would be to make a separate function for this loader, but I can't get a file to work as an arguament at all.
+	//load the machine language program from input.pepo into mem.
 	i = 0;
 	t = 0;
 	//variable to store a character. This is neccessary because the loader traverses one character at a time, but each integer in the file is two characters
